@@ -1,0 +1,10 @@
+{
+    "clangd.fallbackFlags": [
+        "-g",
+        "-Wall",
+        "--std=c++20",
+        "-fstandalone-debug",
+        "-fsanitize=address"
+    ],
+    "editor.fontSize": 18
+}
