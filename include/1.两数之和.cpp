@@ -3,9 +3,7 @@
  *
  * [1] 两数之和
  */
-#include <unordered_map>
-#include <vector>
-using namespace std;
+#include <common.h>
 // @lc code=start
 class Solution {
    public:

@@ -20,6 +20,19 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "Build CMake",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
