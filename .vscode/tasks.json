@@ -9,17 +9,15 @@
                 "--std=c++20",
                 "-g",
                 "-Wall",
-                // "-fstandalone-debug",
-                // "-fsanitize=address",
-                // "-frtti",
                 "${file}",
                 "-o",
-                "${fileBasenameNoExtension}",
+                "${fileBasenameNoExtension}"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "hide": true
         },
         {
             "type": "shell",
@@ -27,12 +25,26 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "build",
+                "build"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "hide": true
+        },
+        {
+            "type": "shell",
+            "label": "touch test",
+            "command": "./start.sh",
+            "args": [
+                "${fileBasename}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "hide": false,
+            "problemMatcher": []
         }
     ]
 }

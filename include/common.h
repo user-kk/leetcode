@@ -1,10 +1,13 @@
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <initializer_list>
+#include <numeric>
 #include <queue>
 #include <span>
 #include <stack>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 using namespace std;
@@ -21,13 +24,13 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
+    ListNode(int x) : val(x), next(nullptr) {}
 };
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
 inline TreeNode *buildTree(std::initializer_list<int> list) {
@@ -47,4 +50,15 @@ inline TreeNode *buildTree(std::initializer_list<int> list) {
         q.pop();
     }
     return root;
+}
+
+inline ListNode *buildList(std::initializer_list<int> list) {
+    ListNode k(-1);
+    ListNode *p = &k;
+    for (int i : list) {
+        p->next = new ListNode(i);
+        p = p->next;
+    }
+    p->next = nullptr;
+    return k.next;
 }
