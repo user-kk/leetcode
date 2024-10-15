@@ -6,5 +6,6 @@
         "-fstandalone-debug",
         "-fsanitize=address"
     ],
-    "editor.fontSize": 18
+    "editor.fontSize": 18,
+    "cmake.cmakePath": "cmake"
 }
