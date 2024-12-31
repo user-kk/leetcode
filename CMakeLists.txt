@@ -10,6 +10,7 @@ endif()
 
 
 find_package(GTest REQUIRED)
+find_package(fmt REQUIRED)
 
 include(GoogleTest)
 
@@ -42,7 +43,7 @@ add_executable(lc_test ${TEST_SOURCES})
 
 #设置头文件
 target_include_directories(lc_test PRIVATE include)
-target_link_libraries(lc_test PRIVATE gtest gtest_main)
+target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt)
 target_compile_options(lc_test PRIVATE -fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address)
 target_link_options(lc_test PRIVATE -fsanitize=address)
 set_target_properties(lc_test PROPERTIES CXX_STANDARD 20)

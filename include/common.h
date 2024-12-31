@@ -63,3 +63,28 @@ inline ListNode *buildList(std::initializer_list<int> list) {
     p->next = nullptr;
     return k.next;
 }
+
+template <typename T>
+std::vector<T> createVector(std::initializer_list<T> il) {
+    return std::vector<T>(il);
+}
+
+template <typename T>
+std::vector<std::vector<T>> createVector(
+    std::initializer_list<std::initializer_list<T>> il) {
+    std::vector<std::vector<T>> vec;
+    for (auto &sub_il : il) {
+        vec.push_back(createVector(sub_il));
+    }
+    return vec;
+}
+
+template <typename T>
+std::vector<std::vector<std::vector<T>>> createVector(
+    std::initializer_list<std::initializer_list<std::initializer_list<T>>> il) {
+    std::vector<std::vector<std::vector<T>>> vec;
+    for (auto &sub_il : il) {
+        vec.push_back(createVector(sub_il));
+    }
+    return vec;
+}

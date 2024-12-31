@@ -43,11 +43,12 @@ class Solution {
                             s.push({v.x + 1, v.y});
                             continue;
                         }
-                        s.pop();
                         if (v.y - 1 >= 0 && grid[v.x][v.y - 1] == '1') {
                             grid[v.x][v.y - 1] = '0';
                             s.push({v.x, v.y - 1});
+                            continue;
                         }
+                        s.pop();
                     }
                 }
             }
