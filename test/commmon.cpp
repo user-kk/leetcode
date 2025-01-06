@@ -63,3 +63,8 @@ TEST(test1, test1_2) {
     auto root = buildList({4, 2, 1, 3});
     int a = 1;
 }
+
+TEST(test1, test1_3) {  // 使用后缀'vec'创建vector<int>对象
+    std::vector<int> v = "[1,2,3,4]"_vec;
+    std::vector<std::vector<int>> v2 = "[[1,2],[3,4]]"_vec2;
+}

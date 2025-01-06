@@ -7,5 +7,6 @@
         "-fsanitize=address"
     ],
     "editor.fontSize": 18,
-    "cmake.cmakePath": "cmake"
+    "cmake.cmakePath": "cmake",
+    "clangd.path": "clangd-19"
 }

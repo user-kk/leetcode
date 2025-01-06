@@ -1,12 +1,14 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <initializer_list>
 #include <numeric>
 #include <queue>
 #include <span>
 #include <stack>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -34,7 +36,25 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 };
 
-inline TreeNode *buildTree(std::initializer_list<int> list) {
+class Node {
+   public:
+    int val;
+    vector<Node *> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val, vector<Node *> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
+inline TreeNode *buildTree(const std::vector<int> &list) {
     TreeNode *root = nullptr;
     std::queue<TreeNode **> q;
     q.push(&root);
@@ -53,7 +73,7 @@ inline TreeNode *buildTree(std::initializer_list<int> list) {
     return root;
 }
 
-inline ListNode *buildList(std::initializer_list<int> list) {
+inline ListNode *buildList(const std::vector<int> &list) {
     ListNode k(-1);
     ListNode *p = &k;
     for (int i : list) {
@@ -87,4 +107,78 @@ std::vector<std::vector<std::vector<T>>> createVector(
         vec.push_back(createVector(sub_il));
     }
     return vec;
+}
+
+inline std::vector<int> buildVector(std::istream &in) {
+    vector<int> vec;
+    int num = 0;
+
+    // 跳过开头的'['
+    if (!in.eof() && in.peek() == '[') {
+        in.get();  // 读取'['
+    }
+    // 忽略空格
+    while (in.peek() == ' ') {
+        in.get();  // 读取空格
+    }
+
+    // 循环读取数字直到字符串结束
+    while (in >> num) {
+        vec.push_back(num);
+
+        // 忽略逗号后的空格
+        while (in.peek() == ' ') {
+            in.get();  // 读取空格
+        }
+        // 检查是否还有逗号分隔符
+        if (in.peek() == ',') {
+            in.get();  // 读取逗号
+        }
+
+        // 忽略逗号后的空格
+        while (in.peek() == ' ') {
+            in.get();  // 读取空格
+        }
+
+        if (in.peek() == ']') {
+            in.get();
+            break;
+        }
+    }
+
+    return vec;
+}
+
+inline std::vector<int> operator"" _vec(const char *str, size_t) {
+    std::stringstream ss(str);
+
+    return buildVector(ss);
+}
+
+inline std::vector<vector<int>> operator"" _vec2(const char *str, size_t) {
+    std::vector<vector<int>> vec;
+    std::stringstream ss(str);
+    int num = 0;
+    while (ss) {
+        ss.get();
+        vec.push_back(buildVector(ss));
+        ss.get();
+        if (ss.peek() == -1) {
+            break;
+        }
+    }
+
+    return vec;
+}
+
+inline TreeNode *operator"" _tree(const char *str, size_t) {
+    std::stringstream ss(str);
+    auto vec = buildVector(ss);
+    return buildTree(vec);
+}
+
+inline ListNode *operator"" _list(const char *str, size_t) {
+    std::stringstream ss(str);
+    auto vec = buildVector(ss);
+    return buildList(vec);
 }
