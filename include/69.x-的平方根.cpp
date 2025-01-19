@@ -10,8 +10,10 @@ class Solution {
     // 二分模板
     int t(vector<int>& nums) {
         auto cond = []([[maybe_unused]] int mid) { return true; };
-        int left = 0;
-        int right = nums.size();
+        // 这个地方根据向左取整还是向右取整来设置，向左取整左闭右开，找不到时为left=right=size()
+        // 向右取整左开右闭，找不到时left=right=-1
+        int left = -1;
+        int right = nums.size() - 1;
 
         // 开区间，循环出口一定是left==right
         while (left < right) {
@@ -30,10 +32,11 @@ class Solution {
                 right = mid - 1;
             }
         }
+        return left;
     }
     int mySqrt(long long x) {
-        long long left = 0;
-        long long right = x + 1;
+        long long left = -1;
+        long long right = x;
         // 条件：找a*a<=x的最大a值
         while (left < right) {
             long long mid = left + (right - left + 1) / 2;
