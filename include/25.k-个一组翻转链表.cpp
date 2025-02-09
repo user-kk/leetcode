@@ -3,7 +3,7 @@
  *
  * [25] K 个一组翻转链表
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for singly-linked list.

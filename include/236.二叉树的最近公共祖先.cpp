@@ -3,7 +3,7 @@
  *
  * [236] 二叉树的最近公共祖先
  */
-#include <common.h>
+#include "common.h"
 namespace {
 // @lc code=start
 /**

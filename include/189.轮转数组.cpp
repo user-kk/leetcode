@@ -3,7 +3,7 @@
  *
  * [189] 轮转数组
  */
-#include <common.h>
+#include "common.h"
 
 #include <algorithm>
 // @lc code=start

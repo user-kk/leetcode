@@ -3,7 +3,7 @@
  *
  * [150] 逆波兰表达式求值
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

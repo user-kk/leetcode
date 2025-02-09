@@ -3,7 +3,7 @@
  *
  * [79] 单词搜索
  */
-#include <common.h>
+#include "common.h"
 
 #include <type_traits>
 // @lc code=start

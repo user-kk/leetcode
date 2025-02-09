@@ -3,7 +3,7 @@
  *
  * [36] 有效的数独
  */
-#include <common.h>
+#include "common.h"
 #include <bitset>
 // @lc code=start
 class Solution {

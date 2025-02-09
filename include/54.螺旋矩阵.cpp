@@ -3,7 +3,7 @@
  *
  * [54] 螺旋矩阵
  */
-#include <common.h>
+#include "common.h"
 
 #include <cstddef>
 // @lc code=start

@@ -3,7 +3,7 @@
  *
  * [118] 杨辉三角
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

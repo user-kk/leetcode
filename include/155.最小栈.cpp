@@ -3,7 +3,7 @@
  *
  * [155] 最小栈
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class MinStack {
    public:

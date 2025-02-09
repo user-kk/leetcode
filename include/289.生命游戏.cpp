@@ -3,7 +3,7 @@
  *
  * [289] 生命游戏
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

@@ -3,7 +3,7 @@
  *
  * [136] 只出现一次的数字
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

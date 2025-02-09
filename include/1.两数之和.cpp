@@ -3,7 +3,7 @@
  *
  * [1] 两数之和
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

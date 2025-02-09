@@ -4,7 +4,7 @@
  * [427] 建立四叉树
  */
 
-#include <common.h>
+#include "common.h"
 namespace {
 
 class Node {

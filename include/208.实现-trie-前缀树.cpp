@@ -3,7 +3,7 @@
  *
  * [208] 实现 Trie (前缀树)
  */
-#include <common.h>
+#include "common.h"
 
 #include <vector>
 // @lc code=start

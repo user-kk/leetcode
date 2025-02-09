@@ -15,7 +15,7 @@
 //
 // clang-format on
 
-#include <common.h>
+#include "common.h"
 #include <numeric>
 // @lc code=start
 class Solution {

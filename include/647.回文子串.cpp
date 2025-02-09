@@ -3,7 +3,7 @@
  *
  * [647] 回文子串
  */
-#include <common.h>
+#include "common.h"
 
 // @lc code=start
 class Solution {

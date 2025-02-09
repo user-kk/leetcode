@@ -3,7 +3,7 @@
  *
  * [101] 对称二叉树
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

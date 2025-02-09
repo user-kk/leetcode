@@ -3,7 +3,7 @@
  *
  * [145] 二叉树的后序遍历
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

@@ -3,7 +3,7 @@
  *
  * [62] 不同路径
  */
-#include <common.h>
+#include "common.h"
 #include <cmath>
 #include <vector>
 // @lc code=start

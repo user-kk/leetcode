@@ -11,6 +11,9 @@ endif()
 
 find_package(GTest REQUIRED)
 find_package(fmt REQUIRED)
+find_package(cpptrace REQUIRED)
+
+
 
 include(GoogleTest)
 
@@ -46,7 +49,8 @@ target_include_directories(lc_test PRIVATE include)
 target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt)
 target_compile_options(lc_test PRIVATE -fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address)
 target_link_options(lc_test PRIVATE -fsanitize=address)
-set_target_properties(lc_test PROPERTIES CXX_STANDARD 20)
+target_link_libraries(lc_test PRIVATE cpptrace::cpptrace)
+
 
 #设置ctest命令
 gtest_discover_tests(lc_test)

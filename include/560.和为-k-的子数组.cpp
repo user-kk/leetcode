@@ -3,7 +3,7 @@
  *
  * [560] 和为 K 的子数组
  */
-#include <common.h>
+#include "common.h"
 
 #include <vector>
 // @lc code=start

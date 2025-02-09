@@ -3,7 +3,7 @@
  *
  * [98] 验证二叉搜索树
  */
-#include <common.h>
+#include "common.h"
 
 #include <cstddef>
 // @lc code=start

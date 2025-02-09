@@ -3,7 +3,7 @@
  *
  * [69] x 的平方根
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

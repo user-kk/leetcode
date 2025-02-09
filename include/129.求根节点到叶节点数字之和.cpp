@@ -3,7 +3,7 @@
  *
  * [129] 求根节点到叶节点数字之和
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

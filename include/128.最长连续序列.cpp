@@ -3,7 +3,7 @@
  *
  * [128] 最长连续序列
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

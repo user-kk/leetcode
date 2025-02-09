@@ -3,7 +3,7 @@
  *
  * [55] 跳跃游戏
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

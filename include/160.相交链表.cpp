@@ -3,7 +3,7 @@
  *
  * [160] 相交链表
  */
-#include <common.h>
+#include "common.h"
 namespace {
 
 // @lc code=start

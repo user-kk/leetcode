@@ -3,7 +3,7 @@
  *
  * [49] 字母异位词分组
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

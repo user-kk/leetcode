@@ -3,7 +3,7 @@
  *
  * [153] 寻找旋转排序数组中的最小值
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

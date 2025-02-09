@@ -3,7 +3,7 @@
  *
  * [46] 全排列
  */
-#include <common.h>
+#include "common.h"
 
 // @lc code=start
 class Solution {

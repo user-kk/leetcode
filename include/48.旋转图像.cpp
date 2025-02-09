@@ -3,7 +3,7 @@
  *
  * [48] 旋转图像
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

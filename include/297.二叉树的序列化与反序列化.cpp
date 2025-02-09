@@ -3,7 +3,7 @@
  *
  * [297] 二叉树的序列化与反序列化
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

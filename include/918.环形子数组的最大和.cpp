@@ -3,7 +3,7 @@
  *
  * [918] 环形子数组的最大和
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

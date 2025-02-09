@@ -3,7 +3,7 @@
  *
  * [207] 课程表
  */
-#include <common.h>
+#include "common.h"
 
 #include <vector>
 // @lc code=start

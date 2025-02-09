@@ -3,7 +3,7 @@
  *
  * [131] 分割回文串
  */
-#include <common.h>
+#include "common.h"
 
 #include <string_view>
 namespace {

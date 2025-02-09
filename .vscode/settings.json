@@ -6,6 +6,19 @@
         "-fstandalone-debug",
         "-fsanitize=address"
     ],
+    "clangd.arguments": [
+        "--clang-tidy",
+        "--compile-commands-dir=build/Debug",
+        "--completion-style=detailed",
+        "--fallback-style=LLVM",
+        "--function-arg-placeholders=true",
+        "--header-insertion-decorators",
+        "--header-insertion=iwyu",
+        "--pch-storage=memory",
+        "-j=64",
+        "--all-scopes-completion",
+        "--background-index"
+    ],
     "editor.fontSize": 18,
     "cmake.cmakePath": "cmake",
     "clangd.path": "clangd-19"

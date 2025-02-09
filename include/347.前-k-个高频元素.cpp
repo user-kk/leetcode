@@ -3,7 +3,7 @@
  *
  * [347] 前 K 个高频元素
  */
-#include <common.h>
+#include "common.h"
 
 #include <queue>
 // @lc code=start

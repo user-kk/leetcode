@@ -3,7 +3,7 @@
  *
  * [33] 搜索旋转排序数组
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

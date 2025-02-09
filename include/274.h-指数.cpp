@@ -3,7 +3,7 @@
  *
  * [274] H 指数
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

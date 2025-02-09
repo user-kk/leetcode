@@ -3,7 +3,7 @@
  *
  * [22] 括号生成
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

@@ -3,7 +3,7 @@
  *
  * [106] 从中序与后序遍历序列构造二叉树
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

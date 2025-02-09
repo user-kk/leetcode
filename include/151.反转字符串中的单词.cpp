@@ -3,7 +3,7 @@
  *
  * [151] 反转字符串中的单词
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

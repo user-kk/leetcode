@@ -3,7 +3,7 @@
  *
  * [82] 删除排序链表中的重复元素 II
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for singly-linked list.

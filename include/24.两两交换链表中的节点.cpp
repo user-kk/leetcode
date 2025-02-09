@@ -3,7 +3,7 @@
  *
  * [24] 两两交换链表中的节点
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for singly-linked list.

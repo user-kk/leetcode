@@ -3,7 +3,7 @@
  *
  * [20] 有效的括号
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

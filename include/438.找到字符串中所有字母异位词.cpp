@@ -3,7 +3,7 @@
  *
  * [438] 找到字符串中所有字母异位词
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

@@ -3,7 +3,7 @@
  *
  * [543] 二叉树的直径
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

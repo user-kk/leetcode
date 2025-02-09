@@ -3,7 +3,7 @@
  *
  * [198] 打家劫舍
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

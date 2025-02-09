@@ -3,7 +3,7 @@
  *
  * [56] 合并区间
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

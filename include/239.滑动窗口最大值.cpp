@@ -3,7 +3,7 @@
  *
  * [239] 滑动窗口最大值
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

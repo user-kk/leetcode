@@ -3,7 +3,7 @@
  *
  * [41] 缺失的第一个正数
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

@@ -1,4 +1,5 @@
-#include <common.h>
+#include "common.h"
+#include <cpptrace/cpptrace.hpp>
 
 void postOrderTraversal(TreeNode* root) {
     stack<TreeNode*> s;
@@ -67,4 +68,10 @@ TEST(test1, test1_2) {
 TEST(test1, test1_3) {  // 使用后缀'vec'创建vector<int>对象
     std::vector<int> v = "[1,2,3,4]"_vec;
     std::vector<std::vector<int>> v2 = "[[1,2],[3,4]]"_vec2;
+}
+
+void kk(int a) { cpptrace::generate_trace().print(std::cout); }
+
+TEST(test1, test1_4) {  // 使用后缀'vec'创建vector<int>对象
+    kk(1);
 }

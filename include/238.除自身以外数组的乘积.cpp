@@ -3,7 +3,7 @@
  *
  * [238] 除自身以外数组的乘积
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 class Solution {
    public:

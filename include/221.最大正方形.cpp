@@ -3,7 +3,7 @@
  *
  * [221] 最大正方形
  */
-#include <common.h>
+#include "common.h"
 namespace {
 
 // @lc code=start

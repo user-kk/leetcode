@@ -3,7 +3,7 @@
  *
  * [257] 二叉树的所有路径
  */
-#include <common.h>
+#include "common.h"
 
 #include <string>
 // @lc code=start

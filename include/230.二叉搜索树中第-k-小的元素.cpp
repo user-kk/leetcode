@@ -3,7 +3,7 @@
  *
  * [230] 二叉搜索树中第 K 小的元素
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.

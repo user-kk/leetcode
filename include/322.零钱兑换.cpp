@@ -3,7 +3,7 @@
  *
  * [322] 零钱兑换
  */
-#include <common.h>
+#include "common.h"
 
 #include <climits>
 // @lc code=start

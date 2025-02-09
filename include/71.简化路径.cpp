@@ -3,7 +3,7 @@
  *
  * [71] 简化路径
  */
-#include <common.h>
+#include "common.h"
 N_B
     // @lc code=start
     class Solution {

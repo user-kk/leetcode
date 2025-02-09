@@ -3,7 +3,7 @@
  *
  * [124] 二叉树中的最大路径和
  */
-#include <common.h>
+#include "common.h"
 // @lc code=start
 /**
  * Definition for a binary tree node.
