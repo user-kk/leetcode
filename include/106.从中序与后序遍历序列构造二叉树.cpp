@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=105 lang=cpp
+ * @lc app=leetcode.cn id=106 lang=cpp
  *
- * [105] 从前序与中序遍历序列构造二叉树
+ * [106] 从中序与后序遍历序列构造二叉树
  */
 #include <common.h>
 // @lc code=start
@@ -19,26 +19,25 @@
  */
 class Solution {
    private:
-    //! find用hash表加速一下更好
-    TreeNode* buildTreeInternal(vector<int>& preorder, int pre_l, int pre_r,
+    TreeNode* buildTreeInternal(vector<int>& postorder, int post_l, int post_r,
                                 vector<int>& inorder, int in_l, int in_r) {
-        if (pre_l == pre_r) {
+        if (post_l == post_r) {
             return nullptr;
         }
-        auto* ret = new TreeNode(preorder[pre_l]);
+        auto* ret = new TreeNode(postorder[post_r - 1]);
         auto it = std::find(inorder.begin() + in_l, inorder.begin() + in_r,
-                            preorder[pre_l]);
+                            postorder[post_r - 1]);
         int left_len = it - (inorder.begin() + in_l);
-        ret->left = buildTreeInternal(preorder, pre_l + 1, pre_l + left_len + 1,
+        ret->left = buildTreeInternal(postorder, post_l, post_l + left_len,
                                       inorder, in_l, in_l + left_len);
-        ret->right = buildTreeInternal(preorder, pre_l + left_len + 1, pre_r,
+        ret->right = buildTreeInternal(postorder, post_l + left_len, post_r - 1,
                                        inorder, in_l + left_len + 1, in_r);
         return ret;
     }
 
    public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        return buildTreeInternal(preorder, 0, preorder.size(), inorder, 0,
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        return buildTreeInternal(postorder, 0, postorder.size(), inorder, 0,
                                  inorder.size());
     }
 };
