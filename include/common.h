@@ -7,12 +7,16 @@
 #include <queue>
 #include <span>
 #include <stack>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <nlohmann/json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 #define _CONCAT(a, b) a##b
 
@@ -111,76 +115,47 @@ std::vector<std::vector<std::vector<T>>> createVector(
     return vec;
 }
 
-inline std::vector<int> buildVector(std::istream &in) {
-    vector<int> vec;
-    int num = 0;
+inline std::vector<int> buildVector(const std::string &s) {
+    json j = json::parse(s);
 
-    // 跳过开头的'['
-    if (!in.eof() && in.peek() == '[') {
-        in.get();  // 读取'['
-    }
-    // 忽略空格
-    while (in.peek() == ' ') {
-        in.get();  // 读取空格
+    // 检查是否为数组
+    if (!j.is_array()) {
+        throw std::runtime_error("not vector");
     }
 
-    // 循环读取数字直到字符串结束
-    while (in >> num) {
-        vec.push_back(num);
+    // 将 JSON 数组转换为 std::vector<int>
+    std::vector<int> vec = j.get<std::vector<int>>();
 
-        // 忽略逗号后的空格
-        while (in.peek() == ' ') {
-            in.get();  // 读取空格
-        }
-        // 检查是否还有逗号分隔符
-        if (in.peek() == ',') {
-            in.get();  // 读取逗号
-        }
+    return vec;
+}
 
-        // 忽略逗号后的空格
-        while (in.peek() == ' ') {
-            in.get();  // 读取空格
-        }
+inline std::vector<std::vector<int>> build2dVector(const std::string &s) {
+    json j = json::parse(s);
 
-        if (in.peek() == ']') {
-            in.get();
-            break;
-        }
+    // 检查是否为数组
+    if (!j.is_array()) {
+        throw std::runtime_error("not vector");
     }
+
+    auto vec = j.get<std::vector<std::vector<int>>>();
 
     return vec;
 }
 
 inline std::vector<int> operator"" _vec(const char *str, size_t) {
-    std::stringstream ss(str);
-
-    return buildVector(ss);
+    return buildVector(str);
 }
 
 inline std::vector<vector<int>> operator"" _vec2(const char *str, size_t) {
-    std::vector<vector<int>> vec;
-    std::stringstream ss(str);
-    int num = 0;
-    while (ss) {
-        ss.get();
-        vec.push_back(buildVector(ss));
-        ss.get();
-        if (ss.peek() == -1) {
-            break;
-        }
-    }
-
-    return vec;
+    return build2dVector(str);
 }
 
 inline TreeNode *operator"" _tree(const char *str, size_t) {
-    std::stringstream ss(str);
-    auto vec = buildVector(ss);
+    auto vec = buildVector(str);
     return buildTree(vec);
 }
 
 inline ListNode *operator"" _list(const char *str, size_t) {
-    std::stringstream ss(str);
-    auto vec = buildVector(ss);
+    auto vec = buildVector(str);
     return buildList(vec);
 }
