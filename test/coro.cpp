@@ -1,76 +1,13 @@
 #include "common.h"
 #include <coroutine>
 #include <stdexcept>
+#include <thread>
+#include <variant>
+#include <fmt/base.h>
 #include <fmt/core.h>
+#include <fmt/std.h>
+#include "coro.h"
 
-struct Generater {
-    struct promise_type {
-        std::suspend_always initial_suspend() { return {}; }
-        void return_void() {}
-        void unhandled_exception() {}
-        std::suspend_always final_suspend() noexcept { return {}; }
-        Generater get_return_object() {
-            return Generater{
-                std::coroutine_handle<promise_type>::from_promise(*this)};
-        }
-
-        std::suspend_always await_transform(int v) {
-            val = v;
-            return {};
-        }
-
-        std::suspend_always yield_value(int v) {
-            val = v;
-            return {};
-        }
-        int val = -2;
-    };
-
-    // 只要自定义了析构函数，那么拷贝和移动必须要考虑
-    explicit Generater(std::coroutine_handle<promise_type> h) : handle(h) {}
-    Generater(Generater&& g) noexcept : handle(g.handle) { g.handle = {}; }
-    Generater& operator=(Generater&& g) noexcept {
-        handle.destroy();
-        handle = g.handle;
-        g.handle = {};
-        return *this;
-    }
-    Generater(const Generater& g) = delete;
-    Generater& operator=(const Generater& g) = delete;
-
-    ~Generater() {
-        if (handle) {
-            handle.destroy();
-        }
-    }
-
-    int next() {
-        if (has_next()) {
-            is_used = true;
-            return handle.promise().val;
-        }
-        throw std::runtime_error("gg");
-    }
-
-    bool has_next() {
-        // 卫语句，因为后面要调用handle，而handle在协程函数体结束后会根据final_suspend的判断决定是否销毁
-        // 若为suspend_never,则一结束就自动销毁，此时调用done()会访问野指针
-        // 若为suspend_always,则函数体结束后自动挂起(此时done()==true,但是promise没被销毁)
-        if (handle.done()) {
-            return false;
-        }
-        if (is_used) {
-            handle.resume();
-            is_used = false;
-        }
-        // resume之后返回done,说明运行的是协程函数体结尾的那段代码，这段代码不会设置新值
-        return !handle.done();
-    }
-
-    std::coroutine_handle<promise_type>
-        handle;           // 看成一个new出来的指针，需要调用distory
-    bool is_used = true;  // 刚开始是已经用完的状态，需要得到新值
-};
 Generater seq() {
     int i = 0;
     for (int i = 0; i < 3; i++) {
@@ -88,5 +25,107 @@ MYTEST(1) {
     auto g1 = std::move(g);
     if (g1.has_next()) {
         fmt::println("{}", g1.next());
+    }
+}
+
+Task<int, DetachExecutor> simple_task1() {
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(3s);
+    co_return 1;
+}
+
+Task<int, DetachExecutor> simple_task2() {
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(4s);
+    fmt::println("thread_id:{},task2", std::this_thread::get_id());
+    co_return 2;
+}
+
+Task<int> simple_task() {
+    auto a = co_await simple_task1();
+    auto b = co_await simple_task2();
+    co_return a + b;
+}
+
+Task<int> simple_task_when_all() {
+    auto [a, b] = co_await when_all(simple_task1(), simple_task2());
+    co_return a + b;
+}
+
+Task<int> simple_task_when_any() {
+    auto k = co_await when_any(simple_task1(), simple_task2());
+    if (k.index() == 0) {
+        co_return std::get<0>(k);
+    } else {
+        co_return std::get<1>(k);
+    }
+}
+
+MYTEST(2) {
+    auto t = simple_task();
+    t.then([](int v) {
+         fmt::println("{}", v);
+     }).catching([](std::exception& e) { fmt::println("{}", e.what()); });
+
+    try {
+        t.get_result();
+    } catch (std::exception& e) {
+        fmt::println("{}", e.what());
+    }
+}
+
+Task<int, DetachExecutor> simple_task3() {
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(3s);
+    fmt::println("thread_id:{},task3", std::this_thread::get_id());
+    co_return 2;
+}
+
+Task<int, InlineExecutor> f1() {
+    fmt::println("thread_id:{},f1:1", std::this_thread::get_id());
+    int a = co_await simple_task3();
+    fmt::println("thread_id:{},f1:2", std::this_thread::get_id());
+    co_return a + 1;
+}
+
+MYTEST(3) {
+    fmt::println("thread_id:{},main", std::this_thread::get_id());
+    auto t = f1();
+    t.then([](int v) {
+         fmt::println("thread_id:{},main2,v:{}", std::this_thread::get_id(), v);
+     }).catching([](std::exception& e) { fmt::println("{}", e.what()); });
+    try {
+        t.get_result();
+        fmt::println("thread_id:{},main3", std::this_thread::get_id());
+    } catch (std::exception& e) {
+        fmt::println("{}", e.what());
+    }
+    fmt::println("thread_id:{},main4", std::this_thread::get_id());
+    this_thread::sleep_for(7s);
+}
+
+MYTEST(4) {
+    auto t = simple_task_when_all();
+    t.then([](int v) {
+         fmt::println("{}", v);
+     }).catching([](std::exception& e) { fmt::println("{}", e.what()); });
+
+    try {
+        t.get_result();
+    } catch (std::exception& e) {
+        fmt::println("{}", e.what());
+    }
+}
+
+MYTEST(5) {
+    auto t = simple_task_when_any();
+    t.then([](int v) {
+         fmt::println("{}", v);
+     }).catching([](std::exception& e) { fmt::println("{}", e.what()); });
+
+    try {
+        t.get_result();
+    } catch (std::exception& e) {
+        fmt::println("{}", e.what());
     }
 }

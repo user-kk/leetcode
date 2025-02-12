@@ -13,6 +13,7 @@ find_package(GTest REQUIRED)
 find_package(fmt REQUIRED)
 find_package(cpptrace REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(asio REQUIRED)
 
 
 
@@ -24,7 +25,7 @@ enable_testing()
 
 
 # 获取test文件夹下所有的.cpp文件
-file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "test/*.cpp")
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/*.cpp")
 
 # 为每个.cpp文件生成对应的可执行文件
 # foreach(TEST_SOURCE ${TEST_SOURCES})
@@ -47,11 +48,14 @@ add_executable(lc_test ${TEST_SOURCES})
 
 #设置头文件
 target_include_directories(lc_test PRIVATE include)
-target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt cpptrace::cpptrace nlohmann_json::nlohmann_json)
+target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt cpptrace::cpptrace nlohmann_json::nlohmann_json asio::asio)
 target_compile_options(lc_test PRIVATE -fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address)
 target_link_options(lc_test PRIVATE -fsanitize=address)
 
 
 #设置ctest命令
 gtest_discover_tests(lc_test)
+
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/project)
 
