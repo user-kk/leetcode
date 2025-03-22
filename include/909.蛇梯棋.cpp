@@ -3,6 +3,7 @@
  *
  * [909] 蛇梯棋
  */
+#include <fmt/base.h>
 #include "common.h"
 // @lc code=start
 class Solution {
@@ -13,6 +14,7 @@ class Solution {
         int m = board.size();
         int n = board[0].size();
         new_board.reserve(m * n);
+        vector<bool> visited(m * n, false);
         for (int i = m - 1; i >= 0; i--) {
             if (flag) {
                 for (int j = 0; j < n; j++) {
@@ -25,37 +27,74 @@ class Solution {
             }
             flag = !flag;
         }
-        struct T {
-            int pos;
-            int cost;
-        };
-        queue<T> q;
-        q.push({0, 0});
-        new_board[0] = -2;
-        int min_cost = INT_MAX;
-        while (!q.empty()) {
-            auto [pos, cost] = q.front();
-            q.pop();
-            if (pos >= m * n - 1) {
-                min_cost = std::min(min_cost, cost);
-                continue;
-            }
-            bool flag = false;
-            for (int i =
-                     std::min(static_cast<int>(new_board.size()) - 1, pos + 6);
-                 i >= pos + 1; i--) {
-                if (new_board[i] != -1 && new_board[i] != -2 &&
-                    new_board[new_board[i] - 1] != -2) {
-                    new_board[new_board[i] - 1] = -2;
-                    q.push({new_board[i] - 1, cost + 1});
-                } else if (new_board[i] == -1 && !flag) {
-                    q.push({i, cost + 1});
-                    flag = true;
+        queue<int> q1;
+        queue<int> q2;
+        q1.push(0);
+
+        int cost = 0;
+        while (!q1.empty() || !q2.empty()) {
+            while (!q1.empty()) {
+                int pos = q1.front();
+                q1.pop();
+                visited[pos] = true;
+                // 如果到了
+                if (pos >= m * n - 1) {
+                    return cost;
                 }
-                new_board[i] = -2;
+
+                bool flag = false;
+                for (int i = std::min(static_cast<int>(new_board.size()) - 1,
+                                      pos + 6);
+                     i >= pos + 1; i--) {
+                    if (new_board[i] == -1) {
+                        if (!flag) {
+                            q2.push(i);
+                            flag = true;
+                        } else {
+                            visited[i] = true;
+                        }
+                        continue;
+                    }
+
+                    if (!visited[new_board[i] - 1]) {
+                        q2.push(new_board[i] - 1);
+                        visited[i] = true;
+                    }
+                }
             }
+            cost++;
+            while (!q2.empty()) {
+                int pos = q2.front();
+                q2.pop();
+                visited[pos] = true;
+                // 如果到了
+                if (pos >= m * n - 1) {
+                    return cost;
+                }
+
+                bool flag = false;
+                for (int i = std::min(static_cast<int>(new_board.size()) - 1,
+                                      pos + 6);
+                     i >= pos + 1; i--) {
+                    if (new_board[i] == -1) {
+                        if (!flag) {
+                            q1.push(i);
+                            flag = true;
+                        } else {
+                            visited[i] = true;
+                        }
+                        continue;
+                    }
+
+                    if (!visited[new_board[i] - 1]) {
+                        q1.push(new_board[i] - 1);
+                        visited[i] = true;
+                    }
+                }
+            }
+            cost++;
         }
-        return min_cost == INT_MAX ? -1 : min_cost;
+        return -1;
     }
 };
 // @lc code=end

@@ -2,6 +2,8 @@
 #include <fmt/core.h>
 #include <fmt/ranges.h>  // 容器支持
 #include <cpptrace/cpptrace.hpp>
+#include <ostream>
+#include <thread>
 
 void postOrderTraversal(TreeNode* root) {
     stack<TreeNode*> s;
@@ -82,4 +84,11 @@ TEST(test1, test1_4) {  // 使用后缀'vec'创建vector<int>对象
     auto vec = build2dVector(jsonString);
 
     fmt::println("{}", vec);
+}
+
+TEST(test1, test1_5) {
+    int a1 = 10;
+    double a2 = 20.5;
+    std::string a3 = "Hello";
+    MYDEBUG(__FUNCTION__, std::this_thread::get_id(), a1, a2, a3);
 }

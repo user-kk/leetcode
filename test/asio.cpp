@@ -1,7 +1,10 @@
 #include "common.h"
 #include <fmt/base.h>
 #include <fmt/core.h>
+#include <fmt/std.h>
 #include <asio.hpp>
+#include <asio/associated_allocator.hpp>
+#include <asio/async_result.hpp>
 #include <asio/read_until.hpp>
 #include <asio/steady_timer.hpp>
 #include <asio/co_spawn.hpp>
@@ -10,11 +13,16 @@
 #include <asio/awaitable.hpp>
 #include <asio/ip/tcp.hpp>
 #include <asio/buffer.hpp>
+#include <asio/use_future.hpp>
 #include <asio/write.hpp>
 #include <asio/read.hpp>
 #include <asio/as_tuple.hpp>
+#include <exception>
+#include <stdexcept>
+#include <system_error>
+#include <thread>
 #include <variant>
-#include "asio/experimental/awaitable_operators.hpp"
+#include <asio/experimental/awaitable_operators.hpp>
 using namespace asio;
 using namespace asio::ip;
 
@@ -134,6 +142,31 @@ asio::awaitable<void> echo(tcp::socket socket) {
     }
 }
 
+asio::awaitable<void> echo2(tcp::socket socket) {
+    std::string buffer;
+    while (true) {
+        using namespace asio::experimental::awaitable_operators;
+        using namespace asio::buffer_literals;
+        asio::steady_timer t(co_await this_coro::executor, 5s);
+        std::variant<std::monostate, std::tuple<std::error_code, size_t>>
+            result = co_await (
+                t.async_wait(use_awaitable) ||
+                asio::async_read_until(socket, dynamic_buffer(buffer), "\n",
+                                       as_tuple(use_awaitable)));
+        if (result.index() == 0) {
+            fmt::println("time out");
+            co_await asio::async_write(socket, "time_out"_buf);
+            co_return;
+        }
+        if (buffer == "quit\n") {
+            co_await asio::async_write(socket, "bye"_buf);
+            co_return;
+        }
+        co_await asio::async_write(socket, dynamic_buffer(buffer));
+        buffer.clear();
+    }
+}
+
 asio::awaitable<void> listen() {
     auto executor = co_await this_coro::executor;
     tcp::acceptor acceptor(executor, tcp::endpoint(tcp::v4(), 9999));
@@ -148,4 +181,114 @@ MYTEST(3) {
     asio::io_context io;
     asio::co_spawn(io, listen(), asio::detached);
     io.run();
+}
+
+struct MyThreadPool {
+    std::vector<std::thread> threads;
+    asio::io_context io_thread_ctx;
+    asio::io_context work_thread_ctx;
+    static MyThreadPool& this_thread_pool() {
+        static MyThreadPool pool;
+        return pool;
+    }
+    ~MyThreadPool() {
+        for (auto& i : threads) {
+            if (i.joinable()) {
+                i.join();
+            }
+        }
+    }
+
+   private:
+    MyThreadPool() {
+        threads.emplace_back([this]() {
+            auto guard = asio::make_work_guard(io_thread_ctx);
+            io_thread_ctx.run();
+        });
+        threads.emplace_back([this]() {
+            auto guard = asio::make_work_guard(work_thread_ctx);
+            work_thread_ctx.run();
+        });
+    }
+};
+
+asio::awaitable<int> kk2() {
+    fmt::println("kk2: id1:{}", std::this_thread::get_id());
+    asio::steady_timer t(co_await this_coro::executor, 5s);
+    co_await t.async_wait(use_awaitable);
+    fmt::println("kk2: id2:{}", std::this_thread::get_id());
+    throw std::runtime_error("kk2 error");
+    co_return 1;
+}
+
+asio::awaitable<void> kk1() {
+    fmt::println("kk1: id1:{}", std::this_thread::get_id());
+    int a = 0;
+    try {
+        a = co_await asio::co_spawn(
+            MyThreadPool::this_thread_pool().work_thread_ctx, kk2,
+            use_awaitable);  // 用use_awaitable会传播异常
+    } catch (std::exception& e) {
+        fmt::println("{}", e.what());
+    }
+
+    fmt::println("kk1: id2:{} a:{}", std::this_thread::get_id(), a);
+    throw std::runtime_error("kk1 error");
+}
+asio::awaitable<void> kk3() {
+    fmt::println("kk3: id1:{}", std::this_thread::get_id());
+    co_return;
+}
+
+MYTEST(4) {
+    fmt::println("main: id1:{}", std::this_thread::get_id());
+    asio::co_spawn(MyThreadPool::this_thread_pool().io_thread_ctx, kk1(),
+                   asio::detached);  // 用detach不会传播异常
+    asio::co_spawn(MyThreadPool::this_thread_pool().io_thread_ctx, kk3(),
+                   asio::detached);
+    fmt::println("main: id2:{}", std::this_thread::get_id());
+}
+
+template <typename Token>
+auto async_task(Token&& token) {
+    return asio::async_initiate<Token, void(std::string, std::error_code)>(
+        [](auto handle) {
+            std::thread{
+                [h = std::move(
+                     handle)]() mutable {  // 必须加mutable，否则编译器报奇怪的错
+                    fmt::println("async_task: id1:{}",
+                                 std::this_thread::get_id());
+                    this_thread::sleep_for(3s);
+                    auto ex = asio::get_associated_executor(h);
+                    std::string ret = "ret1111";
+                    std::error_code rc;
+
+                    ex.execute(
+                        [h = std::move(h), ret, rc]() mutable { h(ret, rc); });
+                }}
+                .detach();
+        },
+        token);
+}
+
+asio::awaitable<void> async_task1() {
+    fmt::println("async_task1: id1:{}", std::this_thread::get_id());
+
+    auto [s, rc] = co_await async_task(as_tuple(use_awaitable));
+    fmt::println("async_task1: id2:{},ret:{}", std::this_thread::get_id(), s);
+    co_return;
+}
+
+asio::awaitable<void> async_task2() {
+    fmt::println("async_task2: id1:{}", std::this_thread::get_id());
+    co_return;
+}
+
+MYTEST(5) {
+    fmt::println("main: id1:{}", std::this_thread::get_id());
+    asio::io_context io;
+    asio::co_spawn(io, async_task1(), asio::detached);
+    asio::co_spawn(io, async_task2(), asio::detached);
+    io.run();
+    fmt::println("main: id2:{}", std::this_thread::get_id());
 }

@@ -1,5 +1,6 @@
 #include <functional>
 #include <future>
+#include <memory>
 #include <type_traits>
 #include <vector>
 #include <thread>
@@ -15,14 +16,14 @@ class ThreadPool {
     ThreadPool(ThreadPool&&) = delete;
     ThreadPool& operator=(ThreadPool&&) = delete;
     explicit ThreadPool(size_t n) {
-        for (size_t i = 0; i <= n; i++) {
+        for (size_t i = 0; i < n; i++) {
             threads_.emplace_back([this]() {
                 while (true) {
                     std::function<void()> task;
                     {
                         std::unique_lock<std::mutex> lock(mutex_);
                         has_task_.wait(lock, [this] {
-                            return this->tasks_.empty() || this->stop_;
+                            return !this->tasks_.empty() || this->stop_;
                         });
                         if (this->tasks_.empty()) {
                             return;
@@ -55,16 +56,16 @@ class ThreadPool {
     auto add_task(F&& f, Args&&... args)
         -> std::future<std::result_of_t<F(Args...)>> {
         using return_type = std::result_of_t<F(Args...)>;
-        auto task = std::packaged_task<return_type()>(
+        auto task = std::make_shared<std::packaged_task<return_type()>>(
             std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-        auto result = task.get_future();
+        auto result = task->get_future();
 
         {
             std::unique_lock<std::mutex> lock(mutex_);
             if (stop_) {
                 throw std::runtime_error("add task on stopped thread pool");
             }
-            tasks_.emplace([task_p = std::move(task)]() mutable { task_p(); });
+            tasks_.emplace(std::move([task]() mutable { (*task)(); }));
         }
         has_task_.notify_one();
         return result;

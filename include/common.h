@@ -1,3 +1,6 @@
+#include <fmt/base.h>
+#include <fmt/ranges.h>
+#include <fmt/std.h>
 #include <gtest/gtest.h>
 
 #include <algorithm>
@@ -26,6 +29,14 @@ using json = nlohmann::json;
 
 #define N_B namespace {
 #define N_E }
+
+#define MYDEBUG(...) mydebug(#__VA_ARGS__, __VA_ARGS__)
+
+template <typename... Args>
+void mydebug(const char *names, Args &&...args) {
+    fmt::println("[{}] = [{}]", names,
+                 fmt::join(std::forward_as_tuple(args...), ", "));
+}
 
 struct ListNode {
     int val;
