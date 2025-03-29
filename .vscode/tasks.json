@@ -36,7 +36,20 @@
         {
             "type": "shell",
             "label": "touch test",
-            "command": "./start.sh",
+            "command": "./util/create_test.sh",
+            "args": [
+                "${fileBasename}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "hide": false,
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "touch test data",
+            "command": "./util/create_test_data.sh",
             "args": [
                 "${fileBasename}"
             ],

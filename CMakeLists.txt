@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(leetcode)
 
-set(CXX_STANDARD 20)
+set(CXX_STANDARD 23)
 set(CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(NOT DEFINED CMAKE_BUILD_TYPE)
@@ -45,6 +45,9 @@ endforeach()
 
 #生成可执行文件
 add_executable(lc_test ${TEST_SOURCES})
+target_compile_features(lc_test PRIVATE cxx_std_23)
+target_compile_definitions(lc_test PRIVATE TEST_DATA_PATH="${CMAKE_SOURCE_DIR}/test/data")
+
 
 #设置头文件
 target_include_directories(lc_test PRIVATE include)

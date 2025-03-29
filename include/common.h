@@ -2,6 +2,7 @@
 #include <fmt/ranges.h>
 #include <fmt/std.h>
 #include <gtest/gtest.h>
+#include <nlohmann/json.hpp>
 
 #include <algorithm>
 #include <cstdio>
@@ -13,10 +14,10 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <system_error>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <nlohmann/json.hpp>
 
 using namespace std;
 using json = nlohmann::json;
@@ -27,8 +28,36 @@ using json = nlohmann::json;
 
 #define MYTEST(num) TEST(CONCAT(_, CURRENT_FILE), CONCAT(_, num))
 
+#define _TOCSTR(s) #s
+#define TOCSTR(s) _TOCSTR(s)
+
 #define N_B namespace {
 #define N_E }
+
+#define ENABLE_REDIRECT                                                        \
+    class CONCAT(CURRENT_FILE, _TEST) : public ::testing::Test {               \
+       protected:                                                              \
+        std::streambuf *originalCinBuffer = nullptr;                           \
+        std::ifstream file;                                                    \
+        void SetUp() override {                                                \
+            string file_path = TEST_DATA_PATH "/" TOCSTR(CURRENT_FILE) ".txt"; \
+            file.open(file_path, ios_base::in);                                \
+            if (!file.is_open()) {                                             \
+                throw std::system_error(                                       \
+                    errno, std::system_category(),                             \
+                    "Failed to open file,file_name:"s.append(file_path));      \
+            }                                                                  \
+                                                                               \
+            originalCinBuffer = std::cin.rdbuf();                              \
+            std::cin.rdbuf(file.rdbuf());                                      \
+        }                                                                      \
+        void TearDown() override {                                             \
+            std::cin.rdbuf(originalCinBuffer);                                 \
+            file.close();                                                      \
+        }                                                                      \
+    }
+
+#define MYTEST_F(num) TEST_F(CONCAT(CURRENT_FILE, _TEST), CONCAT(_, num))
 
 #define MYDEBUG(...) mydebug(#__VA_ARGS__, __VA_ARGS__)
 
