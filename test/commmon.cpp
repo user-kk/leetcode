@@ -1,4 +1,5 @@
 #include "common.h"
+#include "debug_macro.hpp"
 #include <fmt/core.h>
 #include <fmt/ranges.h>  // 容器支持
 #include <cpptrace/cpptrace.hpp>
@@ -90,5 +91,7 @@ TEST(test1, test1_5) {
     int a1 = 10;
     double a2 = 20.5;
     std::string a3 = "Hello";
-    MYDEBUG(__FUNCTION__, std::this_thread::get_id(), a1, a2, a3);
+    // MYDEBUG(__FUNCTION__, std::this_thread::get_id(), a1, a2, a3);
+    debug_macro(a1, a2, a3);
+    debug_macro(a1, a2, a3);
 }
