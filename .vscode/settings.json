@@ -16,7 +16,6 @@
         "--header-insertion=iwyu",
         "--pch-storage=memory",
         "-j=64",
-        "--all-scopes-completion",
         "--background-index"
     ],
     "editor.fontSize": 18,

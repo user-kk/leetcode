@@ -36,6 +36,7 @@ class Solution {
             if (j % val.size() == i && current >= 0) {
                 return i;
             }
+            // 如果下一个起点已经越界了，那么代表没有节点可尝试了
             if (j >= val.size()) {
                 return -1;
             }
