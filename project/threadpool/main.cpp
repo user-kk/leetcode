@@ -1,10 +1,9 @@
 #include "common.h"
-#include "./threadpool.hpp"
+#include "threadpool.hpp"
 #include <csignal>
 #include <cstdlib>
 #include <functional>
 #include <future>
-#include <system_error>
 #include <fmt/base.h>
 #include <fmt/core.h>
 
@@ -23,6 +22,7 @@ void register_signal_handle(std::function<void(int)>&& callback) {
         throw std::runtime_error("Error setting signal handler\n");
     }
 }
+
 };  // namespace Signal
 
 void this_thread_sleep_for(std::chrono::seconds s) {

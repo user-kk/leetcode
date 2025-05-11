@@ -29,6 +29,9 @@ MYTEST(1) {
 }
 
 Task<int, DetachExecutor> simple_task1() {
+    std::variant<int, int> a;
+    std::exception_ptr aa = nullptr;
+
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(3s);
     co_return 1;

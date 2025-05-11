@@ -59,4 +59,7 @@ MYTEST(1) {
     fmt::println("thread_id:{},main", std::this_thread::get_id());
     auto task = simple_task();
     std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::coroutine_handle<> a;
+    std::coroutine_handle<> b;
+    a = b;
 }
