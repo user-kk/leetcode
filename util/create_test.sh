@@ -24,4 +24,4 @@ new_filename="$number.cpp"
 
 # Create a new file with the new filename
 # Add include statement at the beginning of the new file
-echo -e "#include\"$filename\"\n\nMYTEST(1){\n\tSolution s;\n}" > ./test/$new_filename && code ./test/$new_filename
+echo -e "#include\"$filename\"\n\nMYTEST(1){\n\tSolution s;\n}" > ./test/lc_test/$new_filename && code ./test/lc_test/$new_filename

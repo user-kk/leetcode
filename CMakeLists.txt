@@ -25,7 +25,7 @@ enable_testing()
 
 
 # 获取test文件夹下所有的.cpp文件
-file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/*.cpp")
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/lc_test/*.cpp")
 
 # 为每个.cpp文件生成对应的可执行文件
 # foreach(TEST_SOURCE ${TEST_SOURCES})
@@ -50,7 +50,7 @@ target_compile_definitions(lc_test PRIVATE TEST_DATA_PATH="${CMAKE_SOURCE_DIR}/t
 
 
 #设置头文件
-target_include_directories(lc_test PRIVATE include)
+target_include_directories(lc_test PRIVATE include PRIVATE include/lc)
 target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt cpptrace::cpptrace nlohmann_json::nlohmann_json asio::asio)
 target_compile_options(lc_test PRIVATE -fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address)
 target_link_options(lc_test PRIVATE -fsanitize=address)
