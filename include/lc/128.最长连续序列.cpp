@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
    public:
-    // 找头，如果num-1在nums中，那么他就不是头
+    //! 找头，如果num-1在nums中，那么他就不是头
     int longestConsecutive(vector<int>& nums) {
         std::unordered_set<int> set(nums.begin(), nums.end());
         int max = 0;

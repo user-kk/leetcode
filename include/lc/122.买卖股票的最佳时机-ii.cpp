@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
    public:
-    int maxProfit(vector<int>& prices) {
+    int maxProfit2(vector<int>& prices) {
         if (prices.size() == 1) {
             return 0;
         }
@@ -46,6 +46,17 @@ class Solution {
             }
         }
         return 0;
+    }
+
+    int maxProfit(vector<int>& prices) {
+        std::array<int, 2> dp = {0, -prices[0]};
+
+        for (int i = 1; i < prices.size(); i++) {
+            std::array<int, 2> pre = dp;
+            dp[0] = std::max(pre[0], pre[1] + prices[i]);
+            dp[1] = std::max(pre[1], pre[0] - prices[i]);
+        }
+        return std::max(dp[0], dp[1]);
     }
 };
 // @lc code=end

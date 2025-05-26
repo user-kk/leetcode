@@ -40,7 +40,8 @@ class Solution {
         }
         bool success() const { return count == 0; }
     };
-    // 滑动窗口模板
+    //! 滑动窗口模板
+    //! 滑动窗口的题一般要求连续的一段区间能满足某种性质，并且当加入和退出元素时，性质会改变
     string minWindow(string_view s, string_view t) {
         T q;
         q.init(t);

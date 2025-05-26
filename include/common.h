@@ -1,3 +1,4 @@
+#pragma once
 #include <fmt/base.h>
 #include <fmt/ranges.h>
 #include <fmt/std.h>

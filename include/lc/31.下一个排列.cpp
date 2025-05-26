@@ -12,6 +12,9 @@ class Solution {
             return;
         }
         int low = 0;
+        // 从后向前遍历，找到第一个降序的（作为小值）
+        // 再从后向前遍历，找到刚好比小值大一点的（作为大值）
+        // 小值与大值互换，反转原本小值那个位置后面的序列
         for (int i = nums.size() - 1; i >= 1; i--) {
             if (nums[i - 1] < nums[i]) {
                 int target = nums.size() - 1;

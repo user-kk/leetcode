@@ -7,10 +7,14 @@
 // @lc code=start
 class Solution {
    public:
-    int longestValidParentheses(string_view s) {
+    int longestValidParentheses2(string_view s) {
         int ret = 0;
         int left_num = 0;  // 当前积累的左括号数
         int dp = 0;        // 以当前位置为结束的字符串的最长有效括号长度
+
+        // 假设这种情况：()((),答案为2，所以只能在left_num == 0 时更新
+        // 但是又由于这种情况 (()
+        // 这种情况右括号多，左括号没有为0的机会，所以反着遍历
         // 处理左括号少于右括号的情况
         for (int i = 0; i < s.size(); i++) {
             char c = s[i];

@@ -4,6 +4,8 @@ gtest/1.15.0
 cpptrace/0.7.5
 nlohmann_json/3.11.3
 asio/1.32.0
+liburing/2.8
+spdlog/1.15.0
 
 [generators]
 CMakeDeps

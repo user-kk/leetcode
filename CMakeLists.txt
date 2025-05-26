@@ -14,6 +14,7 @@ find_package(fmt REQUIRED)
 find_package(cpptrace REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(asio REQUIRED)
+find_package(spdlog REQUIRED)
 
 
 
@@ -25,7 +26,7 @@ enable_testing()
 
 
 # 获取test文件夹下所有的.cpp文件
-file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/lc_test/*.cpp")
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/*.cpp" "test/lc_test/*.cpp" "test/config/*.cpp")
 
 # 为每个.cpp文件生成对应的可执行文件
 # foreach(TEST_SOURCE ${TEST_SOURCES})
@@ -47,11 +48,16 @@ endforeach()
 add_executable(lc_test ${TEST_SOURCES})
 target_compile_features(lc_test PRIVATE cxx_std_23)
 target_compile_definitions(lc_test PRIVATE TEST_DATA_PATH="${CMAKE_SOURCE_DIR}/test/data")
-
+# 根据构建模式设置SPDLOG_ACTIVE_LEVEL
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(lc_test PRIVATE SPDLOG_ACTIVE_LEVEL=1)
+else()
+    target_compile_definitions(lc_test PRIVATE SPDLOG_ACTIVE_LEVEL=2)
+endif()
 
 #设置头文件
 target_include_directories(lc_test PRIVATE include PRIVATE include/lc)
-target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt cpptrace::cpptrace nlohmann_json::nlohmann_json asio::asio)
+target_link_libraries(lc_test PRIVATE gtest gtest_main fmt::fmt cpptrace::cpptrace nlohmann_json::nlohmann_json asio::asio spdlog::spdlog)
 target_compile_options(lc_test PRIVATE -fsanitize=address -fno-omit-frame-pointer -fsanitize-recover=address)
 target_link_options(lc_test PRIVATE -fsanitize=address)
 

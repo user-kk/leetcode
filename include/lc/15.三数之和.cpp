@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
    public:
-    // 另一种滑动窗口，普通的滑动窗口是区间和，这个是两数的和
+    //! 另一种滑动窗口，普通的滑动窗口是区间和，这个是两数的和
     vector<vector<int>> threeSum(vector<int>& nums) {
         vector<vector<int>> ret;
         std::ranges::sort(nums);

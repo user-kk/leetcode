@@ -18,6 +18,9 @@ class Solution {
             ret.push_back(path);
             return;
         }
+        // 保证这一层不选重复的
+        // 但是不能简单的判断nums[i-1]==nums[i]就不选
+        // 因为上一层选了这一层还要选
         int last_visited_i = -1;  // 上一次被访问过的i
 
         for (int i = 0; i < visited.size(); i++) {

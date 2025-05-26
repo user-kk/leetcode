@@ -41,6 +41,7 @@ class Solution {
        private:
         deque<T> dq;
     };
+
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         vector<int> ret;
         MyQueue q;

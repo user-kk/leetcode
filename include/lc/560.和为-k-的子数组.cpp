@@ -9,7 +9,8 @@
 // @lc code=start
 class Solution {
    public:
-    // 一段连续区间的值可直接使用前缀和相减得到
+    //! 一段连续区间的值可直接使用前缀和相减得到
+    //! 因为这题有负数，所以无法用滑动窗口
     int subarraySum(const vector<int>& nums, int k) {
         // 当遍历到i时，dp[j]代表从nums[j]->nums[i]的和
 

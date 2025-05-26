@@ -14,7 +14,7 @@ class Solution {
                 continue;
             }
             if (1 <= nums[i] && nums[i] <= n) {
-                //! 被交换的位置原来不能有等于自己的值
+                //! 被交换的位置原来不能有等于自己的值,否则会死循环
                 if (nums[nums[i] - 1] != nums[i]) {
                     std::swap(nums[i], nums[nums[i] - 1]);
                     i--;

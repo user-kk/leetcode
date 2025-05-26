@@ -30,6 +30,7 @@ class Solution {
         countMap.insert(currentSum);
         pathSumInteral(countMap, p->left, targetSum, currentSum, ret);
         pathSumInteral(countMap, p->right, targetSum, currentSum, ret);
+        //! extract是删除一个，而非具有相同值的全部，也可以用迭代器删，也是能保证删一个
         countMap.extract(currentSum);
         ret += countMap.count(currentSum - targetSum);
     }

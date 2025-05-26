@@ -20,8 +20,10 @@
 class Solution {
    public:
     int ret = INT_MIN;
-    // 找到包含这个节点的最大的路径
-    // 但是为了使上层形成路径，返回的值不能是right + left + p->val
+    //! 计算当前节点的 最大路径和
+    //! 可以包含左右节点，但最大贡献度不能同时包括左右节点。因为对于某节点，他的贡献只能带其中一个孩子（带大孩子走），整个路径才能向上延伸
+    //! 找到包含这个节点的最大的路径
+    //! 但是为了使上层形成路径，返回的值不能是right + left + p->val
     int traversal(TreeNode* p) {
         if (p == nullptr) {
             return 0;
