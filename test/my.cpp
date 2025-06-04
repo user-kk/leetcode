@@ -7,6 +7,7 @@
 #include "my/monotonic_buffer_resource.h"
 #include "my/unique_ptr.h"
 #include "my/shared_ptr.h"
+#include "my/memmove.h"
 #include <spdlog/spdlog.h>
 
 using My::SharedPtr;
@@ -197,4 +198,56 @@ TEST(MemResTest, pmrTest3) {
     auto p = res.new_as<D>();
 
     std::atomic<int> k2;
+}
+
+// 测试无重叠
+TEST(MemmoveTest, NoOverlap) {
+    char buffer[50] = "Hello, World!";
+    My::memmove(buffer + 13, buffer, 5);
+    EXPECT_STREQ(buffer, "Hello, World!Hello");
+}
+
+// 测试部分重叠，源在目标前面
+TEST(MemmoveTest, PartialOverlapSrcBeforeDest) {
+    char buffer[50] = "abcdefghij";
+    My::memmove(buffer + 3, buffer, 7);
+    EXPECT_STREQ(buffer, "abcabcdefg");
+}
+
+// 测试部分重叠，源在目标后面
+TEST(MemmoveTest, PartialOverlapSrcAfterDest) {
+    char buffer[50] = "abcdefghij";
+    My::memmove(buffer, buffer + 3, 7);
+    EXPECT_STREQ(buffer, "defghijhij");
+}
+
+// 测试完全重叠
+TEST(MemmoveTest, FullOverlap) {
+    char buffer[50] = "abcdefghij";
+    My::memmove(buffer, buffer, 10);
+    EXPECT_STREQ(buffer, "abcdefghij");
+}
+
+// 测试零长度
+TEST(MemmoveTest, ZeroLength) {
+    char buffer[50] = "abcdefghij";
+    My::memmove(buffer + 3, buffer, 0);
+    EXPECT_STREQ(buffer, "abcdefghij");
+}
+
+struct A {
+    alignas(16) int a;
+    void kk(int a) {}
+};
+
+struct B : public A {
+    int kk(string a) { return 0; }
+};
+
+TEST(HiddenTest, hidden) {
+    B k;
+    // k.kk(1); 报错
+    std::unordered_map<int, int> k2;
+    deque<int> k3;
+    k3[1] = 100;
 }

@@ -2,5 +2,5 @@
 
 MYTEST(1) {
     Solution s;
-    s.strStr("mississippi", "issip");
+    s.strStr("ababcaababcaabc", "ababcaabc");
 }

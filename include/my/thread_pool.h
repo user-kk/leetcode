@@ -1,3 +1,4 @@
+#pragma once
 #include <functional>
 #include <future>
 #include <memory>
@@ -7,6 +8,8 @@
 #include <queue>
 #include <condition_variable>
 #include <mutex>
+
+namespace My {
 
 class ThreadPool {
    public:
@@ -37,13 +40,10 @@ class ThreadPool {
         }
     }
     void stop() {
-        {
-            std::unique_lock<std::mutex> lock(mutex_);
-            if (stop_) {
-                return;
-            }
-            stop_ = true;
+        if (stop_) {
+            return;
         }
+        stop_ = true;
         has_task_.notify_all();
         for (auto& t : threads_) {
             if (t.joinable()) {
@@ -84,5 +84,6 @@ class ThreadPool {
     std::queue<std::function<void()>> tasks_;
     std::condition_variable has_task_;
     std::mutex mutex_;
-    bool stop_ = false;
+    std::atomic<bool> stop_ = false;
 };
+}  // namespace My

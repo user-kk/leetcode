@@ -52,16 +52,12 @@ class Solution {
                 is_palindrome[i - 1][i] = false;
             }
         }
+
         // 按斜线遍历
-        for (int i = 2; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                if (!is_palindrome[j - i + 1][j - 1]) {
-                    is_palindrome[j - i][j] = false;
-                    continue;
-                }
-                if (s[j - i] != s[j]) {
-                    is_palindrome[j - i][j] = false;
-                    continue;
+        for (int init_j = 2; init_j < n; init_j++) {
+            for (int i = 0, j = init_j; j < n; i++, j++) {
+                if (s[i] != s[j] || !is_palindrome[i + 1][j - 1]) {
+                    is_palindrome[i][j] = false;
                 }
             }
         }

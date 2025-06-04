@@ -102,8 +102,8 @@ class Solution {
         return nextVal;
     }
 
-    int strStr(const string &haystack,
-               const string &needle) {  // s 主串 patternStr 模式串
+    int strStr2(const string &haystack,
+                const string &needle) {  // s 主串 patternStr 模式串
 
         vector<int> next = getNextArray(needle);
         int i = 0;  // i 为主串索引
@@ -125,6 +125,44 @@ class Solution {
             return i - j;
         }
         return -1;
+    }
+
+    vector<int> get_next(string_view vals) {
+        vector<int> next(vals.size(), 0);
+        for (int i = 1; i < vals.size(); i++) {
+            int pre_index = next[i - 1];
+            while (pre_index != 0 && vals[pre_index] != vals[i]) {
+                pre_index = next[pre_index - 1];
+            }
+
+            if (vals[pre_index] == vals[i]) {
+                next[i] = pre_index + 1;
+            } else {
+                next[i] = 0;
+            }
+        }
+        return next;
+    }
+
+    int strStr(string_view s, string_view t) {
+        vector<int> next = get_next(t);
+        int i = 0;
+        int j = 0;
+
+        while (i < s.size() && j < t.size()) {
+            if (s[i] == t[j]) {
+                i++;
+                j++;
+                continue;
+            }
+
+            if (j != 0) {
+                j = next[j - 1];
+            } else {
+                i++;
+            }
+        }
+        return j == t.size() ? i - j : -1;
     }
 };
 // @lc code=end
