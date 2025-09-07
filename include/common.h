@@ -35,6 +35,12 @@ using json = nlohmann::json;
 #define N_B namespace {
 #define N_E }
 
+#define DISABLE_COPY_AND_MOVE(ClassName)              \
+    ClassName(const ClassName &) = delete;            \
+    ClassName(ClassName &&) = delete;                 \
+    ClassName &operator=(const ClassName &) = delete; \
+    ClassName &operator=(ClassName &&) = delete
+
 #define ENABLE_REDIRECT                                                        \
     class CONCAT(CURRENT_FILE, _TEST) : public ::testing::Test {               \
        protected:                                                              \

@@ -19,7 +19,7 @@
  */
 class Solution {
    public:
-    vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> postorderTraversal2(TreeNode* root) {
         vector<int> ret;
         stack<TreeNode*> s;
         TreeNode* p = root;
@@ -46,6 +46,33 @@ class Solution {
                 p = p->left;
             }
             last = p;  // 出来时相当于遍历了空节点，所以赋值last为空
+        }
+        return ret;
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ret;
+        TreeNode* p = root;
+        struct T {
+            TreeNode* ptr;
+            bool visited;
+        };
+        std::stack<T> st;
+
+        while (p != nullptr || !st.empty()) {
+            while (p != nullptr) {
+                st.push({p, false});
+                p = p->left;
+            }
+
+            if (!st.top().visited) {
+                st.top().visited = true;
+                p = st.top().ptr->right;
+            } else {
+                ret.push_back(st.top().ptr->val);
+                st.pop();
+                //! 重要
+                p = nullptr;
+            }
         }
         return ret;
     }

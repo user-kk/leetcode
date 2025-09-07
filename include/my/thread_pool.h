@@ -8,16 +8,15 @@
 #include <queue>
 #include <condition_variable>
 #include <mutex>
+#include "common.h"
 
 namespace My {
 
 class ThreadPool {
    public:
     ThreadPool() = delete;
-    ThreadPool(const ThreadPool&) = delete;
-    ThreadPool& operator=(const ThreadPool&) = delete;
-    ThreadPool(ThreadPool&&) = delete;
-    ThreadPool& operator=(ThreadPool&&) = delete;
+    DISABLE_COPY_AND_MOVE(ThreadPool);
+
     explicit ThreadPool(size_t n) {
         for (size_t i = 0; i < n; i++) {
             threads_.emplace_back([this]() {
