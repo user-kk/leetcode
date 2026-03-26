@@ -16,53 +16,32 @@ class Solution {
         vector<int> ret;
         ret.reserve(row * col);
 
-        int i = 0;
-        int j = 0;
-        int right = col;
-        int down = row;
-        int left = -1;
-        int up = 0;
+        struct Direction {
+            int x;
+            int y;
+        };
 
-        while (true) {
-            if (j == right) {
-                break;
-            }
-            for (; j < right; j++) {
-                ret.push_back(m[i][j]);
-            }
-            j--;
-            i++;
-            right--;
+        Direction directions[4] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
-            if (i == down) {
-                break;
-            }
-            for (; i < down; i++) {
-                ret.push_back(m[i][j]);
-            }
-            i--;
-            j--;
-            down--;
+        size_t di = 0;
 
-            if (j == left) {
-                break;
-            }
-            for (; j > left; j--) {
-                ret.push_back(m[i][j]);
-            }
-            j++;
-            i--;
-            left++;
+        size_t step[2] = {col, row - 1};
 
-            if (i == up) {
-                break;
+        //! 注意不能先走（0,0），先走了step[0]就不是col了，而是col-1了，导致后续的step[0]和step[1]都不对了
+        int pos[2] = {0, -1};
+
+        while (ret.size() < row * col) {
+            for (int i = 0; i < step[di % 2]; i++) {
+                //! 别加反了，因为directions里是先x后y的，所以pos[0]要加y，pos[1]要加x
+                pos[0] += directions[di].y;
+                pos[1] += directions[di].x;
+                ret.push_back(m[pos[0]][pos[1]]);
             }
-            for (; i > up; i--) {
-                ret.push_back(m[i][j]);
-            }
-            i++;
-            j++;
-            up++;
+
+            step[di % 2]--;  //! 每走完一个方向就要减少对应维度的步数
+                             //! 0,2行减一 1,3列减一
+
+            di = (di + 1) % 4;
         }
         return ret;
     }

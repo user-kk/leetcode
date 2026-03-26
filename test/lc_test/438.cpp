@@ -1,6 +1,7 @@
 #include "438.找到字符串中所有字母异位词.cpp"
+#include "common.h"
 
 MYTEST(1) {
     Solution s;
-    s.findAnagrams("abab", "ab");
+    MYDEBUG(s.findAnagrams("cbaebabacd", "abc"));
 }

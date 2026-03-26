@@ -19,6 +19,8 @@ class LRUCache {
         } else {
             access.erase(values[key].it);
             E e = it->second;
+            //! unordered_map的insert函数当有key时插入会失败，而非直接覆盖
+            //! 要覆盖可用insert_or_assign
             values[key] = {e.v, access.insert(access.end(), key)};
 
             return e.v;

@@ -3,68 +3,60 @@
  *
  * [438] 找到字符串中所有字母异位词
  */
+#include <algorithm>
+#include <unordered_map>
 #include "common.h"
 // @lc code=start
 class Solution {
    public:
     vector<int> findAnagrams(const string& s, const string& p) {
         struct T {
-            int current;
-            int all;
-        };
-        std::unordered_map<char, T> m;
-        int len = p.size();
-        int count = 0;
-        for (char c : p) {
-            if (auto i = m.find(c); i != m.end()) {
-                i->second.all++;
-            } else {
-                m.insert({c, T{0, 1}});
+            std::array<int, 26> map{};
+            int count = 0;
+            void init(string_view t) {
+                std::ranges::fill(map, INT_MIN);
+                count = t.size();
+                for (char c : t) {
+                    if (map[c - 'a'] == INT_MIN) {
+                        map[c - 'a'] = 0;
+                    }
+                    map[c - 'a']++;
+                }
             }
-        }
-
-        // 滑动窗口[i,j)
-        int i = 0;
-        int j = 0;
-        vector<int> ret;
-        bool clear = true;
-
-        for (int k = 0; k < s.size(); k++) {
-            if (auto it = m.find(s[k]); it != m.end()) {
-                clear = false;
-                it->second.current++;
-                j++;
-                count++;
-                if (it->second.current == it->second.all) {
-                    if (count == len) {
-                        ret.push_back(j - len);
-                        // 缩小一格
-                        m[s[i]].current--;
-                        i++;
-                        count--;
-                    }
-                } else if (it->second.current > it->second.all) {
-                    while (s[i] != s[k]) {
-                        // 缩小一格
-                        m[s[i]].current--;
-                        i++;
-                        count--;
-                    }
-                    // 缩小一格
-                    m[s[i]].current--;
-                    i++;
+            bool success() const { return count == 0; }
+            void push(char c) {
+                if (map[c - 'a'] == INT_MIN) {
+                    return;
+                }
+                if (map[c - 'a'] > 0) {
                     count--;
                 }
-            } else {
-                i = k + 1;
-                j = k + 1;
-                if (!clear) {
-                    count = 0;
-                    for (auto& m_it : m) {
-                        m_it.second.current = 0;
-                    }
-                    clear = true;
+
+                map[c - 'a']--;
+            }
+            void restore(char c) {
+                if (map[c - 'a'] == INT_MIN) {
+                    return;
                 }
+                if (map[c - 'a'] >= 0) {
+                    count++;
+                }
+                map[c - 'a']++;
+            }
+        };
+        T t{};
+        t.init(p);
+        int left = 0;
+        vector<int> ret;
+        for (int right = 0; right < s.size(); right++) {
+            t.push(s[right]);
+            while (t.success()) {
+                if (right - left + 1 == p.size()) {
+                    ret.push_back(left);
+                }
+
+                t.restore(s[left]);
+                left++;
             }
         }
         return ret;

@@ -6,6 +6,7 @@
 #include "common.h"
 
 #include <cstddef>
+#include <optional>
 // @lc code=start
 /**
  * Definition for a binary tree node.
@@ -24,33 +25,26 @@ class Solution {
     bool isValidBST(TreeNode* root) {
         stack<TreeNode*> st;
         TreeNode* p = root;
-        bool flag = true;
-        int current = 0;
-
-        st.push(root);
-        while (!st.empty()) {
-            while (p != nullptr && p->left != nullptr) {
-                st.push(p->left);
+        std::optional<int> current = std::nullopt;
+        //! 非递归遍历树
+        while (p != nullptr || !st.empty()) {
+            while (p != nullptr) {
+                st.push(p);
                 p = p->left;
             }
-
-            p = st.top();
+            TreeNode* t = st.top();
             st.pop();
-            if (flag) {
-                current = p->val;
-                flag = false;
-            } else {
-                if (p->val <= current) {
+            if (!current.has_value()) {
+                current = t->val;
+            } else [[likely]] {
+                if (t->val <= current.value()) {
                     return false;
                 }
-                current = p->val;
+
+                current = t->val;
             }
-            if (p->right != nullptr) {
-                st.push(p->right);
-                p = p->right;
-            } else {
-                p = nullptr;  // 向右走不了一定要注意弹栈再向右走
-            }
+
+            p = t->right;
         }
         return true;
     }

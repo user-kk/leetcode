@@ -25,7 +25,17 @@ class Solution {
             visited[i] = false;
         }
     }
+    //! dfs标准模板
     vector<vector<int>> permute(vector<int>& nums) {
+        vector<bool> visited(nums.size(), false);
+        vector<vector<int>> ret;
+        vector<int> t;
+        t.reserve(nums.size());
+        dfs(nums, visited, t, ret);
+        return ret;
+    }
+
+    vector<vector<int>> permute2(vector<int>& nums) {
         if (nums.empty()) {
             return {};
         }
@@ -64,14 +74,5 @@ class Solution {
         }
         return ret;
     }
-
-    // vector<vector<int>> permute(vector<int>& nums) {
-    //     vector<bool> visited(nums.size(), false);
-    //     vector<vector<int>> ret;
-    //     vector<int> t;
-    //     t.reserve(nums.size());
-    //     dfs(nums, visited, t, ret);
-    //     return ret;
-    // }
 };
 // @lc code=end

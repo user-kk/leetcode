@@ -5,7 +5,7 @@
  */
 #include "common.h"
 
-#include <unordered_map>
+namespace {
 class Node {
    public:
     int val;
@@ -18,6 +18,7 @@ class Node {
         random = NULL;
     }
 };
+
 // @lc code=start
 /*
 // Definition for a Node.
@@ -37,6 +38,8 @@ public:
 
 class Solution {
    public:
+    //! 另一种O(1)空间的方法：可以把原本的没用的next当做一个map，指向新节点
+    //! 新节点先直接复制，然后随机节点的新值=(*(新节点的随机节点))->next
     Node* copyRandomList(Node* head) {
         Node* p1 = head;
         Node new_head{0};
@@ -63,3 +66,4 @@ class Solution {
     }
 };
 // @lc code=end
+}  // namespace

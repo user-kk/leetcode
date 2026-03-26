@@ -28,5 +28,41 @@ class Solution {
         }
         return max;
     }
+
+    int longestConsecutive2(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        std::unordered_map<int, int> m{};
+        int max_len = 1;
+
+        for (auto i : nums) {
+            m.insert({i, 0});
+        }
+
+        for (auto& [num, cnt] : m) {
+            if (cnt != 0) {
+                continue;
+            }
+            int v = num;
+            cnt = 1;
+            auto it = m.find(v + 1);
+            while (it != m.end()) {
+                if (it->second != 0) {
+                    cnt += it->second;
+                    break;
+                }
+
+                it->second = 1;
+                cnt++;
+                v = it->first;
+                it = m.find(v + 1);
+            }
+
+            max_len = std::max(max_len, cnt);
+        }
+
+        return max_len;
+    }
 };
 // @lc code=end

@@ -53,7 +53,7 @@ class Solution {
             }
         }
 
-        // 按斜线遍历
+        //! 按斜线遍历，标准方法
         for (int init_j = 2; init_j < n; init_j++) {
             for (int i = 0, j = init_j; j < n; i++, j++) {
                 if (s[i] != s[j] || !is_palindrome[i + 1][j - 1]) {

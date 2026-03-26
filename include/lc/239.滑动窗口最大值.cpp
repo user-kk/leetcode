@@ -32,6 +32,7 @@ class Solution {
             dq.push_front(t);
         }
         int back(int invalid_index) {
+            //! 过期的元素出队，这种记录index的写法比起标准答案更不容易出错
             while (dq.back().index <= invalid_index) {
                 dq.pop_back();
             }

@@ -20,7 +20,7 @@
 
 class Solution {
    public:
-    bool isSymmetric(TreeNode* root) {
+    bool isSymmetric2(TreeNode* root) {
         std::deque<TreeNode*> q1;
         std::deque<TreeNode*> q2;
         q1.push_back(root);
@@ -61,5 +61,20 @@ class Solution {
         }
         return true;
     }
+
+    //! 检查a，b两颗子树是否轴对称（a的左和b的右轴对称并且a的右和b的左轴对称）
+    bool check(TreeNode* l, TreeNode* r) {
+        if (l == nullptr && r == nullptr) {
+            return true;
+        }
+
+        if (l != nullptr && r != nullptr) {
+            return (l->val == r->val) && check(l->left, r->right) &&
+                   check(l->right, r->left);
+        }
+        return false;
+    }
+
+    bool isSymmetric(TreeNode* root) { return check(root->left, root->right); }
 };
 // @lc code=end
