@@ -8,15 +8,22 @@
 class Solution {
    public:
     int rob(vector<int>& nums) {
-        vector<int> r(nums.size());   // 偷
-        vector<int> nr(nums.size());  // 不偷
-        r[0] = nums[0];
-        nr[0] = 0;
-        for (int i = 1; i < nums.size(); i++) {
-            r[i] = nums[i] + nr[i - 1];
-            nr[i] = std::max(r[i - 1], nr[i - 1]);
+        if (nums.size() == 1) {
+            return nums[0];
         }
-        return std::max(r[nums.size() - 1], nr[nums.size() - 1]);
+
+        if (nums.size() == 2) {
+            return max(nums[0], nums[1]);
+        }
+        vector<int> dp(nums.size(), 0);
+
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
+
+        for (int i = 2; i < nums.size(); i++) {
+            dp[i] = max(nums[i] + dp[i - 2], dp[i - 1]);
+        }
+        return dp.back();
     }
 };
 // @lc code=end

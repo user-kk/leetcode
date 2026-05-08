@@ -17,33 +17,54 @@
  */
 class Solution {
    public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        ListNode ret(0);
-        ListNode* new_head = &ret;
-        ListNode* next_head = new_head;
-        ListNode* p = head;
-        while (true) {
-            next_head = p;
-            for (int i = 0; i < k; i++) {
-                // 到了最后一节，重新翻转一下，因为题中要求最后一节顺序不变
-                if (p == nullptr) {
-                    p = new_head->next;
-                    new_head->next = nullptr;
-                    while (p != nullptr) {
-                        ListNode* t = p->next;
-                        p->next = new_head->next;
-                        new_head->next = p;
-                        p = t;
-                    }
-                    return ret.next;
-                }
-                ListNode* t = p->next;
-                p->next = new_head->next;
-                new_head->next = p;
-                p = t;
-            }
-            new_head = next_head;
+    // last是第k+1个（哨兵）
+    ListNode* reverseList(ListNode* pre, ListNode* p, ListNode* last) {
+        ListNode* head = pre;
+
+        //! 重要,与普通的翻转链表不同，普通的翻转链表头的next是nullptr
+        //! 这个要单独设置
+        head->next = last;
+
+        ListNode* next_pre = p;
+        while (p != last) {
+            ListNode* k = p->next;
+            p->next = head->next;
+            head->next = p;
+            p = k;
         }
+
+        return next_pre;
+    }
+
+    ListNode* findK(ListNode* head, int k) {
+        int i = 0;
+        ListNode* p = head->next;
+        ListNode* last = nullptr;
+        while (p != nullptr && i < k) {
+            p = p->next;
+            i++;
+        }
+
+        if (i < k) {
+            return nullptr;
+        }
+
+        last = p;
+        return reverseList(head, head->next, last);
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode new_head;
+        new_head.next = head;
+
+        ListNode* p = &new_head;
+
+        p = findK(p, k);
+
+        while (p != nullptr) {
+            p = findK(p, k);
+        }
+        return new_head.next;
     }
 };
 // @lc code=end

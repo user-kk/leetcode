@@ -8,6 +8,8 @@
 class Solution {
    public:
     int largestRectangleArea(vector<int>& heights) {
+        //! 和接雨水有点相反，找左右两边第一个比我小的
+        //! max(自己高度 * (右边比我小的位置坐标 - 左边比我小的位置坐标))
         vector<int> left(heights.size(), -1);
         vector<int> right(heights.size(), heights.size());
 

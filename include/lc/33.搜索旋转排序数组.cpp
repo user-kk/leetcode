@@ -56,6 +56,13 @@ class Solution {
         }
     }
 
+    // 对于任意一个index，其左区间和右区间至少有一个是有序的，
+    // 那么就可以根据这个区间的最大值和最小值来判断Target是否在该区间内，
+    // 由此就可以确定新的查找区间为有序半区还是无序半区
+
+    //! 先划分有序区间（通过nums[mid]和nums[0]比较实现）是l到mid还是mid到r
+    //! 再判断target是否在有序区间内，这样就可调整l，r
+    //! 判断有序区间是跟0比，但是获得的结果是l到mid有序或mid到r有序，而非从零开始的有序
     int search(vector<int>& nums, int target) {
         int l = 0;
         int r = nums.size() - 1;

@@ -7,11 +7,15 @@
 // @lc code=start
 class Solution {
    public:
-    // 二分模板
+    // 二分模板,练习题见34题
     int t(vector<int>& nums) {
         auto cond = []([[maybe_unused]] int mid) { return true; };
         // 这个地方根据向左取整还是向右取整来设置，向左取整左闭右开，找不到时为left=right=size()
         // 向右取整左开右闭，找不到时left=right=-1
+        //
+        // 记忆方法：要保证int mid = left + (right - left + 1) 中的mid有效，同时
+        // 这个向右偏，所以右侧必须右值，所以左开右闭，同时左侧无效，所以找不到最终落左侧
+
         int left = -1;
         int right = nums.size() - 1;
 

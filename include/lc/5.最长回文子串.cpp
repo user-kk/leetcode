@@ -7,7 +7,7 @@
 // @lc code=start
 class Solution {
    public:
-    string longestPalindrome(const string& s) {
+    string longestPalindrome2(const string& s) {
         string k;
         k.reserve(2 * s.size() + 3);
         k.push_back('^');
@@ -54,5 +54,43 @@ class Solution {
 
         return ret;
     }
+
+    // 中心拓展法
+    string longestPalindrome(const string& s) {
+        auto getPLen = [](const string& s, int pos1, int pos2) {
+            int len = 0;
+            while (pos1 >= 0 && pos2 < s.size() && s[pos1--] == s[pos2++]) {
+                len++;
+            }
+            return len;
+        };
+
+        if (s.size() == 1) {
+            return s;
+        }
+        int max_len = 0;
+        int start_index = 0;
+
+        for (int i = 1; i < s.size(); i++) {
+            {
+                int t = getPLen(s, i, i);
+                int len = 2 * t - 1;
+                if (len > max_len) {
+                    max_len = len;
+                    start_index = i - t + 1;
+                }
+            }
+            {
+                int t = getPLen(s, i - 1, i);
+                int len = 2 * t;
+                if (len > max_len) {
+                    max_len = len;
+                    start_index = i - t;
+                }
+            }
+        }
+        return s.substr(start_index, max_len);
+    }
 };
 // @lc code=end
+//  #a#b#a#

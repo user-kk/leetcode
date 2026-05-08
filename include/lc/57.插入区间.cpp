@@ -8,7 +8,7 @@
 class Solution {
    public:
     // left-right: 1-2  3-4 插入a-b
-    // 找到第一个right使a<=right,找到最后一个left使left>=b
+    //! 找到第一个right使a<=right,找到最后一个left使left>=b
     vector<vector<int>> insert(vector<vector<int>>& intervals,
                                vector<int>& newInterval) {
         int left = 0;

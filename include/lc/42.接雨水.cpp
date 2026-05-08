@@ -22,12 +22,8 @@ class Solution {
 
         // left和right指向的是要进行计算的那一列
         while (left <= right) {
-            if (height[left] > left_max) {
-                left_max = height[left];
-            }
-            if (height[right] > right_max) {
-                right_max = height[right];
-            }
+            left_max = std::max(left_max, height[left]);
+            right_max = std::max(right_max, height[right]);
 
             if (left_max < right_max) {
                 // 这种情况下，能够确定在left这一点上min(left左侧的max,left右侧的max)==left左侧的max

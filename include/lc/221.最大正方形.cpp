@@ -26,19 +26,6 @@ class Solution {
             }
         }
 
-        for (int i = 1; i < row; i++) {
-            for (int j = 1; j < coloum; j++) {
-                if (matrix[i][j] == '0') {
-                    continue;
-                }
-
-                int a = dp[i - 1][j - 1];
-                int b = dp[i - 1][j];
-                int c = dp[i][j - 1];
-                dp[i][j] = std::min({a, b, c}) + 1;
-            }
-        }
-
         int _max = -1;
         for (int i = 1; i < row; i++) {
             for (int j = 1; j < coloum; j++) {

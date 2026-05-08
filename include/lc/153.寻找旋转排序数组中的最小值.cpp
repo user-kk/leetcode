@@ -37,7 +37,7 @@ class Solution {
         int r = nums.size() - 1;
         while (l <= r) {
             int mid = l + (r - l) / 2;
-            // 先更新有序阶段的最小值，然后去无序阶段重新找
+            //! 先更新有序阶段的最小值，然后去无序阶段重新找
             if (nums[0] <= nums[mid]) {  // l 到 mid 有序
                 ret = std::min(ret, nums[l]);
                 l = mid + 1;

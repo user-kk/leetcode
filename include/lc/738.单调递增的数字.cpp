@@ -8,6 +8,8 @@
 // @lc code=start
 class Solution {
    public:
+    //! 从左往右遍历各位数字，找到第一个开始下降的数字[i]
+    // 将[i]减1，然后将[i+1...]各位数字全部置为9即可
     vector<int> num2vector(int num) {
         vector<int> ret;
         ret.reserve(9);

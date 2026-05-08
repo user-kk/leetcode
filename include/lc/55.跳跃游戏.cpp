@@ -38,7 +38,7 @@ class Solution {
         if (nums.size() == 1) {
             return true;
         }
-        int cost = 1;
+        int cost = 1;  // 走到目标需要的步数
         for (int i = nums.size() - 2; i >= 0; i--) {
             if (nums[i] < cost) {
                 cost++;
