@@ -20,7 +20,7 @@
  */
 class Solution {
    public:
-    vector<int> rightSideView(TreeNode* root) {
+    vector<int> rightSideView2(TreeNode* root) {
         if (root == nullptr) {
             return {};
         }
@@ -51,6 +51,32 @@ class Solution {
                     q1.push_back(q2.front()->right);
                 }
                 q2.pop_front();
+            }
+        }
+        return ret;
+    }
+
+    vector<int> rightSideView(TreeNode* root) {
+        if (root == nullptr) {
+            return {};
+        }
+        vector<int> ret;
+        std::deque<TreeNode*> q;
+        q.push_back(root);
+
+        while (!q.empty()) {
+            ret.push_back(q.back()->val);
+
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                TreeNode* t = q.front();
+                if (t->left != nullptr) {
+                    q.push_back(t->left);
+                }
+                if (t->right != nullptr) {
+                    q.push_back(t->right);
+                }
+                q.pop_front();
             }
         }
         return ret;

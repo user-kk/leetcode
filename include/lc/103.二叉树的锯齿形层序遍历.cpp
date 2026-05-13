@@ -27,43 +27,42 @@ class Solution {
         }
         vector<vector<int>> ret;
 
-        std::deque<TreeNode*> q1, q2;
+        std::deque<TreeNode*> q;
 
-        q1.push_back(root);
-        vector<int> layor;
-        while (!q1.empty() || !q2.empty()) {
-            for (auto* it : q1) {
-                layor.push_back(it->val);
-            }
-            ret.push_back(std::move(layor));
+        q.push_back(root);
 
-            while (!q1.empty()) {
-                if (q1.front()->left != nullptr) {
-                    q2.push_back(q1.front()->left);
-                }
-                if (q1.front()->right != nullptr) {
-                    q2.push_back(q1.front()->right);
-                }
+        bool flag = true;
 
-                q1.pop_front();
-            }
-            if (q2.empty()) {
-                break;
-            }
-            for (auto it = q2.rbegin(); it != q2.rend(); it++) {
-                layor.push_back((*it)->val);
-            }
-            ret.push_back(std::move(layor));
+        while (!q.empty()) {
+            int n = q.size();
+            vector<int> v;
+            for (int i = 0; i < n; i++) {
+                if (flag) {
+                    TreeNode* t = q.front();
+                    v.push_back(t->val);
+                    q.pop_front();
+                    if (t->left != nullptr) {
+                        q.push_back(t->left);
+                    }
+                    if (t->right != nullptr) {
+                        q.push_back(t->right);
+                    }
 
-            while (!q2.empty()) {
-                if (q2.front()->left != nullptr) {
-                    q1.push_back(q2.front()->left);
+                } else {
+                    TreeNode* t = q.back();
+                    v.push_back(t->val);
+                    q.pop_back();
+
+                    if (t->right != nullptr) {
+                        q.push_front(t->right);
+                    }
+                    if (t->left != nullptr) {
+                        q.push_front(t->left);
+                    }
                 }
-                if (q2.front()->right != nullptr) {
-                    q1.push_back(q2.front()->right);
-                }
-                q2.pop_front();
             }
+            flag = !flag;
+            ret.push_back(std::move(v));
         }
 
         return ret;

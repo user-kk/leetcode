@@ -36,7 +36,7 @@ class Solution {
         return next_pre;
     }
 
-    ListNode* findK(ListNode* head, int k) {
+    ListNode* findKAndReverse(ListNode* head, int k) {
         int i = 0;
         ListNode* p = head->next;
         ListNode* last = nullptr;
@@ -59,10 +59,10 @@ class Solution {
 
         ListNode* p = &new_head;
 
-        p = findK(p, k);
+        p = findKAndReverse(p, k);
 
         while (p != nullptr) {
-            p = findK(p, k);
+            p = findKAndReverse(p, k);
         }
         return new_head.next;
     }

@@ -7,6 +7,7 @@
 // @lc code=start
 class Solution {
    public:
+    // 看周围是否是陆地，每个陆地增加的边长 = 4 - 周围陆地个数
     int islandPerimeter(vector<vector<int>>& grid) {
         int row = grid.size();
         int coloum = grid[0].size();

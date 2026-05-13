@@ -36,11 +36,10 @@ class Solution {
 
         for (int num : nums) {
             for (int i = target; i >= 0; i--) {
-                if (dp[i]) {
-                    if (i + num == target) {
+                if (i >= num && dp[i - num]) {
+                    dp[i] = true;
+                    if (i == target) {
                         return true;
-                    } else if (i + num < target) {
-                        dp[i + num] = true;
                     }
                 }
             }

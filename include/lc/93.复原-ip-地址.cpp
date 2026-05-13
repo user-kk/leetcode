@@ -25,6 +25,7 @@ N_B
             }
             return;
         }
+        //! 看到0就立刻切，因为不可能存在01这种ip地址
         if (s[0] == '0') {
             dfs(s.substr(1), depth + 1, cur_val * 1000);
             return;

@@ -19,28 +19,24 @@ class Solution {
         return is_palindrome[begin][end];
     }
 
-    void dfs(const string& s, int begin, int len) {
-        if (begin == s.size()) {
+    void dfs(const string& s, int begin) {
+        if (begin >= s.size()) {
             ret.push_back(t);
-            return;
-        }
-        if (begin + len > s.size()) {
-            return;
-        }
-        // 切
-        if (is_success(begin, begin + len - 1)) {
-            t.emplace_back(s.begin() + begin, s.begin() + begin + len);
-            dfs(s, begin + len, 1);
-            t.pop_back();
         }
 
-        // 不切
-        dfs(s, begin, len + 1);
+        for (int i = begin; i < s.size(); i++) {
+            if (is_palindrome[begin][i]) {
+                // 切
+                t.push_back(s.substr(begin, i - begin + 1));
+                dfs(s, i + 1);
+                t.pop_back();
+            }
+        }
     }
 
     vector<vector<string>> partition(string& s) {
         build(s);
-        dfs(s, 0, 1);
+        dfs(s, 0);
         return ret;
     }
 
