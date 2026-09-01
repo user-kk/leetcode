@@ -17,7 +17,7 @@
  */
 class Solution {
    public:
-    ListNode* swapPairs(ListNode* head) {
+    ListNode* swapPairs2(ListNode* head) {
         if (head == nullptr || head->next == nullptr) {
             return head;
         }
@@ -33,6 +33,7 @@ class Solution {
             p2->next = p1;
             pre->next = p2;
             pre = p1;
+            //! 注意先根据p1改p2,再改p1
             p2 = p1->next == nullptr ? nullptr : p1->next->next;
             p1 = p1->next;
         }

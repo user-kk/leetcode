@@ -28,17 +28,15 @@ class Solution {
         std::unordered_map<int, int> m;
 
         //! 重要，排除两种特殊情况：前缀和本身为k,nums[0]为k
-        m.insert({0, 1});
+        m[0] = 1;
 
         for (int i = 0; i < nums.size(); i++) {
+            //! 先查再插入前缀和（不能反，反了查k==0就会出现空路径）
             if (auto it = m.find(prefixSum[i] - k); it != m.end()) {
                 count += it->second;
             }
-            if (auto it = m.find(prefixSum[i]); it != m.end()) {
-                it->second++;
-            } else {
-                m.insert({prefixSum[i], 1});
-            }
+            // 若不存在，直接执行值初始化，int的值初始化结果为0
+            m[prefixSum[i]]++;
         }
         return count;
     }

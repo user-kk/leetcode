@@ -28,6 +28,7 @@ class LFUCache {
         f2v[f].erase(it->second);
         auto new_it = f2v[f + 1].insert(f2v[f + 1].end(), new_kv);
         k2v[k] = new_it;
+
         if (f2v[minf].empty()) {
             //! 之前保证一定有值，如果突然没了，那么肯定是这次更新引起的
             minf = f + 1;

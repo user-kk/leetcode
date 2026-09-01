@@ -10,49 +10,48 @@
 // @lc code=start
 class LRUCache {
    public:
-    LRUCache(int capacity) : _capacity(capacity) {}
+    struct KV {
+        int k;
+        int v;
+    };
+
+    LRUCache(int capacity) : capacity(capacity), size(0) {}
 
     int get(int key) {
-        auto it = values.find(key);
-        if (it == values.end()) {
+        auto it = m.find(key);
+        if (it == m.end()) {
             return -1;
-        } else {
-            access.erase(values[key].it);
-            E e = it->second;
-            //! unordered_map的insert函数当有key时插入会失败，而非直接覆盖
-            //! 要覆盖可用insert_or_assign
-            values[key] = {e.v, access.insert(access.end(), key)};
-
-            return e.v;
         }
+
+        KV kv = *(it->second);
+        access.erase(it->second);
+        //! unordered_map的insert函数当有key时插入会失败，而非直接覆盖
+        //! 要覆盖可用insert_or_assign
+        m[kv.k] = access.insert(access.end(), kv);
+        return kv.v;
     }
+
     void put(int key, int value) {
-        auto it = values.find(key);
-        if (it != values.end()) {
-            E e = it->second;
-            access.erase(e.it);
-            values[key] = {value, access.insert(access.end(), key)};
+        if (get(key) != -1) {
+            m[key]->v = value;
             return;
         }
-        // 没有时
-        _use++;
-        if (_use > _capacity) {
-            auto dump = access.begin();
-            values.erase(*dump);
-            access.erase(dump);
-            _use--;
+        // 容量不够，淘汰一个
+        if (size >= capacity) {
+            KV kv = access.front();
+            access.pop_front();
+            m.erase(kv.k);
+            size--;
         }
 
-        values[key] = {value, access.insert(access.end(), key)};
+        m[key] = access.insert(access.end(), {key, value});
+        size++;
     }
-    struct E {
-        int v;
-        std::list<int>::iterator it;
-    };
-    std::unordered_map<int, E> values;
-    std::list<int> access;
-    int _capacity;
-    int _use = 0;
+
+    int capacity;
+    int size;
+    std::list<KV> access;
+    std::unordered_map<int, std::list<KV>::iterator> m;
 };
 
 /**

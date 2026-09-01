@@ -94,7 +94,7 @@ class Solution {
                 continue;
             }
 
-            //! 有左子树，砍掉，先找左子树的最右节点为k
+            //! 有右子树，砍掉，先找左子树的最右节点为k
             TreeNode* k = p->left;
             while (k->right != nullptr) {
                 k = k->right;

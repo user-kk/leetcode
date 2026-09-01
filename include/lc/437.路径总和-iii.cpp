@@ -22,24 +22,26 @@
  */
 class Solution {
    public:
-    void pathSumInteral(std::unordered_multiset<long> &countMap, TreeNode *p,
+    void pathSumInteral(std::unordered_map<long, int> &countMap, TreeNode *p,
                         int targetSum, long currentSum, int &ret) {
         // 这是从根节点向下找的方法，开销较小，每层只需存储一个值
         if (p == nullptr) {
             return;
         }
         currentSum += p->val;
-        countMap.insert(currentSum);
+        if (auto it = countMap.find(currentSum - targetSum); it != nullptr) {
+            ret += it->second;
+        }
+        countMap[currentSum]++;
         pathSumInteral(countMap, p->left, targetSum, currentSum, ret);
         pathSumInteral(countMap, p->right, targetSum, currentSum, ret);
-        //! extract是删除一个，而非具有相同值的全部，也可以用迭代器删，也是能保证删一个
-        countMap.extract(currentSum);
-        ret += countMap.count(currentSum - targetSum);
+        countMap[currentSum]--;
     }
-    int pathSum2(TreeNode *root, int targetSum) {
+    int pathSum(TreeNode *root, int targetSum) {
         int ret = 0;
-        std::unordered_multiset<long> countMap;
-        countMap.insert(0);
+        std::unordered_map<long, int> countMap;
+        countMap[0]++;  // 值初始化，默认为0
+
         pathSumInteral(countMap, root, targetSum, 0, ret);
         return ret;
     }
@@ -69,7 +71,7 @@ class Solution {
         return ret;
     }
 
-    int pathSum(TreeNode *root, int targetSum) {
+    int pathSum2(TreeNode *root, int targetSum) {
         int ret = 0;
         _pathSum(root, targetSum, ret);
         return ret;

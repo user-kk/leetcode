@@ -46,3 +46,27 @@ MYTEST(1) {
     t1.join();
     t2.join();
 }
+
+MYTEST(2) {
+    std::atomic<int> k = 0;
+    std::condition_variable cv;
+    std::mutex m;
+
+    std::vector<std::thread> threads;
+    threads.reserve(3);
+    for (int i = 0; i < 3; i++) {
+        threads.emplace_back([&k, &m, i, &cv]() {
+            for (int j = 0; j < 10; j++) {
+                std::unique_lock<std::mutex> l(m);
+                cv.wait(l, [&k, i]() { return k % 3 == i; });
+                cout << "id: " << std::this_thread::get_id() << " k:" << k++
+                     << endl;
+                cv.notify_all();
+            }
+        });
+    }
+
+    for (int i = 0; i < 3; i++) {
+        threads[i].join();
+    }
+}

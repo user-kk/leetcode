@@ -35,6 +35,7 @@ class Solution {
         if (val > ret) {
             ret = val;  // 保存的时候可以包含自己的节点
         }
+        //! 别忘了也可能是自己一个
         return std::max({p->val, left + p->val, right + p->val});
     }
     int maxPathSum(TreeNode* root) {

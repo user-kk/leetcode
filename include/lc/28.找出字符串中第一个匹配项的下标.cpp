@@ -144,6 +144,7 @@ class Solution {
         return next;
     }
 
+    //! kmp
     int strStr(string_view s, string_view t) {
         vector<int> next = get_next(t);
         int i = 0;

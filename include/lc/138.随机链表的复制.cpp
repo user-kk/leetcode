@@ -38,8 +38,6 @@ public:
 
 class Solution {
    public:
-    //! 另一种O(1)空间的方法：可以把原本的没用的next当做一个map，指向新节点
-    //! 新节点先直接复制，然后随机节点的新值=(*(新节点的随机节点))->next
     Node* copyRandomList(Node* head) {
         Node* p1 = head;
         Node new_head{0};
@@ -62,6 +60,45 @@ class Solution {
             p1 = p1->next;
             p2 = p2->next;
         }
+        return new_head.next;
+    }
+
+    //! 另一种O(1)空间的方法：可以把原本的没用的next当做一个map，指向新节点
+    //! A -> A' -> B -> B' -> C -> C'
+    Node* copyRandomList2(Node* head) {
+        if (!head) {
+            return nullptr;
+        }
+
+        // 1. A -> A' -> B -> B' ...
+        for (Node* p = head; p != nullptr;) {
+            Node* copy = new Node(p->val);
+            copy->next = p->next;
+            p->next = copy;
+
+            p = copy->next;
+        }
+
+        // 2. 设置 random
+        for (Node* p = head; p != nullptr; p = p->next->next) {
+            if (p->random != nullptr) {
+                p->next->random = p->random->next;
+            }
+        }
+
+        // 3. 拆开两条链
+        Node new_head{-1};
+        Node* h = &new_head;
+
+        for (Node* p = head; p != nullptr; p = p->next) {
+            Node* copy = p->next;
+            p->next = copy->next;
+
+            h->next = copy;
+            copy->next = nullptr;
+            h = copy;
+        }
+
         return new_head.next;
     }
 };

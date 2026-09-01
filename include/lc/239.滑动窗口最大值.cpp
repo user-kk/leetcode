@@ -6,55 +6,41 @@
 #include "common.h"
 // @lc code=start
 class Solution {
-   public:
-    struct T {
-        int val;
-        int index;
-    };
-    // 单调队列
-    class MyQueue {
-       public:
-        void push(T t) {
-            if (dq.empty()) {
-                dq.push_back(t);
-                return;
-            }
-
-            if (t.val >= dq.back().val) {
-                dq.clear();
-                dq.push_back(t);
-                return;
-            }
-
-            while (dq.front().val <= t.val) {
-                dq.pop_front();
-            }
-            dq.push_front(t);
-        }
-        int back(int invalid_index) {
-            //! 过期的元素出队，这种记录index的写法比起标准答案更不容易出错
-            while (dq.back().index <= invalid_index) {
-                dq.pop_back();
-            }
-            return dq.back().val;
-        }
-
-       private:
-        deque<T> dq;
-    };
-
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        vector<int> ret;
-        MyQueue q;
+        struct T {
+            int v;
+            int index;
+        };
+
+        struct MyDp {
+            explicit MyDp(int k) : k(k) {};
+            int k;
+            std::deque<T> dp;
+            void push(int val, int index) {
+                //! 从队首开始清除过期的(一直在往队尾插，所以队首是老的)
+                while (!dp.empty() && dp.front().index <= index - k) {
+                    dp.pop_front();
+                }
+                //! 从队尾开始清除小的（因为在有新的大的情况下，之前的小的一点用没有）
+                while (!dp.empty() && dp.back().v < val) {
+                    dp.pop_back();
+                }
+
+                dp.push_back({val, index});
+            }
+        };
+
+        MyDp mydp(k);
         for (int i = 0; i < k; i++) {
-            q.push(T{nums[i], i});
+            mydp.push(nums[i], i);
         }
 
-        for (int i = 0; i + k < nums.size(); i++) {
-            ret.push_back(q.back(i - 1));
-            q.push(T{nums[i + k], i + k});
+        vector<int> ret;
+        for (int i = k; i < nums.size(); i++) {
+            ret.push_back(mydp.dp.front().v);
+            mydp.push(nums[i], i);
         }
-        ret.push_back(q.back(static_cast<int>(nums.size()) - k - 1));
+        ret.push_back(mydp.dp.front().v);
         return ret;
     }
 };

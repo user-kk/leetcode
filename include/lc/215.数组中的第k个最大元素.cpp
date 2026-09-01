@@ -48,10 +48,12 @@ struct Heap {
                 minIdx = left;
             }
 
+            //! 记住这里用minIdx，而不是i
             if (right < vals.size() && vals[right] < vals[minIdx]) {
                 minIdx = right;
             }
 
+            //! 下沉不了就可以停下了，要不然会死循环
             if (minIdx == i) {
                 break;
             }
@@ -103,6 +105,7 @@ class Solution {
             return nums[first];
         }
 
+        //! 不是nums[rand()],是nums[begin+rand()%n]
         swap(nums[first], nums[first + std::rand() % (last - first + 1)]);
 
         int val = nums[first];
@@ -110,6 +113,7 @@ class Solution {
         int j = last;
 
         while (i < j) {
+            //! 下面两个while顺序一定不能互换
             while (i < j && nums[j] >= val) {
                 j--;
             }
