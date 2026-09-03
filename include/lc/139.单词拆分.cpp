@@ -14,24 +14,20 @@ class Solution {
         std::unordered_set<std::string_view> dict(wordDict.begin(),
                                                   wordDict.end());
 
-        vector<bool> dp(s.size(), false);
+        vector<bool> dp(s.size() + 1, false);
         string_view s_view{s};
-        dp[0] = dict.contains(s_view.substr(0, 1));
+        dp[0] = true;  // dp[i]代表前i个字符能被拆分
 
-        for (int i = 1; i < s.size(); i++) {
-            for (int j = -1; j < i; j++) {  // j代表分割线前一个元素的坐标
+        // 定义新引入的字符串为s[j->i],左闭右闭
+        for (int i = 0; i < s.size(); i++) {
+            for (int j = 0; j <= i; j++) {  // j代表分割线前一个元素的坐标
 
-                if (j == -1) {
-                    dp[i] = dict.contains(s_view.substr(j + 1, i - j));
-                    continue;
+                if (dict.contains(s_view.substr(j, i - j + 1)) && dp[j]) {
+                    dp[i + 1] = true;
                 }
-                if (dp[i]) {
-                    break;
-                }
-                dp[i] = dp[j] && dict.contains(s_view.substr(j + 1, i - j));
             }
         }
-        return dp[s.size() - 1];
+        return dp[s.size()];
     }
 };
 // @lc code=end
